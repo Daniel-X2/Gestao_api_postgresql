@@ -1,4 +1,9 @@
 Api/obj/
 Api/bin/
-Api/host.txt
+
 /Api/bin
+/Api.Core/bin
+/Api.Core/host.txt
+Api.Core/obj
+Api.test/obj
+Api.test/bin

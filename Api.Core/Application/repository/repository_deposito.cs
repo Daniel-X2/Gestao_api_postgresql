@@ -26,7 +26,7 @@ class deposito:Init_repository
      }
     public static async Task<tipos> get_estoque()
     {
-        NpgsqlConnection connect=Connect();
+       await using NpgsqlConnection connect=Connect();
         await connect.OpenAsync();
 
         var cmd=new NpgsqlCommand("SELECT nome,quantidade FROM produto",connect);
@@ -44,7 +44,7 @@ class deposito:Init_repository
     }
     public static async Task<List<double>> get_valor_bruto()
     {
-        NpgsqlConnection connect=Connect();
+      await using  NpgsqlConnection connect=Connect();
         await connect.OpenAsync();
 
         var cmd= new NpgsqlCommand("SELECT valor_revenda FROM produto",connect);
@@ -74,7 +74,7 @@ class deposito:Init_repository
     }
     public static async Task<int> atualizar_produto(string nome_antigo,string novo_nome)
     {
-        NpgsqlConnection connect= Connect();
+      await using  NpgsqlConnection connect= Connect();
         await connect.OpenAsync();
 
        await using var cmd = new NpgsqlCommand("UPDATE produto set nome = @novo_nome WHERE nome = @nome_antigo",connect);

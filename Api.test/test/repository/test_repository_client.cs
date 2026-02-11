@@ -1,6 +1,6 @@
 using Xunit;
 using static repository_client;
-using static repository_funcionario;
+
 public class Test_client
 {
     [Fact]
@@ -11,8 +11,10 @@ public class Test_client
         int conta=5555;
         bool isvip=true;
         int resultado= await add_client(nome,cpf,conta,isvip);
+        
+        await delete(nome);
         Assert.NotEqual(0,resultado);
-       await delete(nome);
+      
     }
     [Fact]
     public async Task test_atualizar_client()

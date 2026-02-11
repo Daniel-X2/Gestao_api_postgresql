@@ -5,7 +5,7 @@ using Npgsql;
 class repository_funcionario:Init_repository
 {
     
-    public static async Task<tipos> Get_funcionario()
+    protected internal static async Task<tipos> Get_funcionario()
     {
         await using NpgsqlConnection connect=Connect();
         
