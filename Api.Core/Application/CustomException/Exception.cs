@@ -33,3 +33,10 @@ public class InvalidAccount : Exception
     public InvalidAccount(){}
     public InvalidAccount(int account):base($"a conta nao e valida {account}"){}
 }
+
+public class InvalidNascimentoException : Exception
+{
+    public InvalidNascimentoException(){}
+
+    public InvalidNascimentoException(int nascimento) : base($"o ano de nascimento nao e valido "){}
+}

@@ -8,10 +8,11 @@ namespace Api.core.Application.repository
     { 
    internal Task<bool> IsExistsCpf(string cpf);
    internal Task<ListaFuncionario> GetFuncionario();
-   internal Task<int> AddFuncionario(FuncionarioDto campos);
+   internal Task<int> AddFuncionario(FuncionarioDto campos);//
    internal Task<int> UpdateFuncionario(FuncionarioDto campos,int id);
    internal Task<int> DeleteFuncionario(int id);
    internal Task<int> GetIdByCpf(string cpf);
+   internal Task<FuncionarioDto> GetById(int id);
     }
 class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
 {
@@ -54,11 +55,11 @@ class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         while(await reader.ReadAsync())
         {
             FuncionarioDto campos=new();
-            campos.nome=(string)reader["nome"];
-            campos.cpf=(string)reader["cpf"];
-            campos.isadmin=(bool)reader["isadmin"];
-            campos.quantidade_atestado=(int)reader["quantidade_atestado"];
-            campos.nascimento=(int)reader["nascimento"];
+            campos.Nome=(string)reader["nome"];
+            campos.Cpf=(string)reader["cpf"];
+            campos.Isadmin=(bool)reader["isadmin"];
+            campos.QuantidadeAtestado=(int)reader["quantidade_atestado"];
+            campos.Nascimento=(int)reader["nascimento"];
             lista.lista_funci.Add(campos);
         }
          
@@ -74,11 +75,11 @@ class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
 
         await using (var cmd = new NpgsqlCommand("INSERT INTO funcionario (nome ,cpf, isadmin,quantidade_atestado,nascimento) VALUES (@nome ,@cpf, @isadmin,@quantidade_atestado,@nascimento)", connect))
         {
-            cmd.Parameters.AddWithValue("nome", campos.nome);
-            cmd.Parameters.AddWithValue("cpf", campos.cpf);
-            cmd.Parameters.AddWithValue("isadmin", campos.isadmin);
-            cmd.Parameters.AddWithValue("quantidade_atestado", campos.quantidade_atestado);
-            cmd.Parameters.AddWithValue("nascimento",campos.nascimento);
+            cmd.Parameters.AddWithValue("nome", campos.Nome);
+            cmd.Parameters.AddWithValue("cpf", campos.Cpf);
+            cmd.Parameters.AddWithValue("isadmin", campos.Isadmin);
+            cmd.Parameters.AddWithValue("quantidade_atestado", campos.QuantidadeAtestado);
+            cmd.Parameters.AddWithValue("nascimento",campos.Nascimento);
             resultado=await cmd.ExecuteNonQueryAsync();
         }
         
@@ -94,11 +95,11 @@ class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         int resultado;
       await  using (var cmd=new NpgsqlCommand("UPDATE  funcionario set nome =@nome,cpf=@cpf,isadmin=@isadmin,quantidade_atestado=@quantidade_atestado,nascimento=@nascimento WHERE id=@id", connect))
         {
-            cmd.Parameters.AddWithValue("nome", campos.nome);
-            cmd.Parameters.AddWithValue("cpf", campos.cpf);
-            cmd.Parameters.AddWithValue("isadmin", campos.isadmin);
-            cmd.Parameters.AddWithValue("quantidade_atestado", campos.quantidade_atestado);
-            cmd.Parameters.AddWithValue("nascimento",campos.nascimento);
+            cmd.Parameters.AddWithValue("nome", campos.Nome);
+            cmd.Parameters.AddWithValue("cpf", campos.Cpf);
+            cmd.Parameters.AddWithValue("isadmin", campos.Isadmin);
+            cmd.Parameters.AddWithValue("quantidade_atestado", campos.QuantidadeAtestado);
+            cmd.Parameters.AddWithValue("nascimento",campos.Nascimento);
             cmd.Parameters.AddWithValue("id", id);
             resultado=await cmd.ExecuteNonQueryAsync();
         }
@@ -123,7 +124,29 @@ class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         
         
     }
+    public  async Task<FuncionarioDto> GetById(int id)
+    {
+        await using NpgsqlConnection connect=host.Connect(); 
+        
+        await connect.OpenAsync();
 
+        await using var cmd = new NpgsqlCommand("SELECT * FROM funcionario WHERE id = @id", connect);
+        cmd.Parameters.AddWithValue("id", id);
+        
+        await using var reader = await cmd.ExecuteReaderAsync();
+        await reader.ReadAsync();
+        
+        FuncionarioDto campos=new();
+        campos.Nome=(string)reader["nome"];
+        campos.Cpf=(string)reader["cpf"];
+        campos.Isadmin=(bool)reader["Isadmin"];
+        campos.Nascimento=(int)reader["nascimento"];
+        campos.QuantidadeAtestado = (int)reader["quantidade_atestado"];
+           
+        
+         
+        return campos;
+    }
 
 
 }

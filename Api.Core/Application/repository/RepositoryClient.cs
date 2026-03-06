@@ -34,9 +34,9 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         {
             ClientDto campos=new();
             campos.Nome=(string)reader["nome"];
-            campos.cpf=(string)reader["cpf"];
-            campos.conta=(int)reader["conta"];
-            campos.isvip=(bool)reader["isvip"];
+            campos.Cpf=(string)reader["cpf"];
+            campos.Conta=(int)reader["conta"];
+            campos.Isvip=(bool)reader["isvip"];
             lista.lista_client.Add(campos);
         }
          
@@ -56,9 +56,9 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         
         ClientDto campos=new();
         campos.Nome=(string)reader["nome"];
-        campos.cpf=(string)reader["cpf"];
-        campos.conta=(int)reader["conta"];
-        campos.isvip=(bool)reader["isvip"];
+        campos.Cpf=(string)reader["cpf"];
+        campos.Conta=(int)reader["conta"];
+        campos.Isvip=(bool)reader["isvip"];
            
         
          
@@ -115,10 +115,10 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         
        await using var cmd = new NpgsqlCommand("UPDATE  cliente set nome=@nome,cpf=@cpf,conta=@conta,isvip=@isvip  WHERE id = @id", connect);
       
-       cmd.Parameters.AddWithValue("conta",campos.conta);
-       cmd.Parameters.AddWithValue("isvip",campos.isvip);
+       cmd.Parameters.AddWithValue("conta",campos.Conta);
+       cmd.Parameters.AddWithValue("isvip",campos.Isvip);
        cmd.Parameters.AddWithValue("nome", campos.Nome);
-       cmd.Parameters.AddWithValue("cpf", campos.cpf);
+       cmd.Parameters.AddWithValue("cpf", campos.Cpf);
        cmd.Parameters.AddWithValue("id", id);
        
         

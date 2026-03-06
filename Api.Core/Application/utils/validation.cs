@@ -107,5 +107,24 @@ namespace Utils
         
         return 00;
     }
-}
+
+    public bool IsValidNascimento(int ano)
+    {
+        int anoAtual = DateTime.Now.Year;
+        if (ano > anoAtual || int.IsNegative(anoAtual))
+        {
+            throw new InvalidNascimentoException(ano);
+        }
+        if (anoAtual - ano > 85 || anoAtual - ano <18 )
+        {
+            throw new InvalidNascimentoException(ano);
+        }
+
+        return true;
+        
+        
+       Console.WriteLine(); 
+        return true;
+    }
+    }
 }

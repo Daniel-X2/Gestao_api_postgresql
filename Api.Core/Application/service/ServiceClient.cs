@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Utils;
 using Dto;
 using Api.core.Application.repository;
@@ -34,10 +33,10 @@ namespace Api.core.Application.service
     {
         ClientDto campos=new();
         Validation verificador = new();
-        campos.cpf = cpf;
+        campos.Cpf = cpf;
         campos.Nome = nome;
-        campos.isvip = isvip;
-        campos.conta = conta;
+        campos.Isvip = isvip;
+        campos.Conta = conta;
         try
         {
             verificador.VerificarNome(nome);
@@ -51,7 +50,7 @@ namespace Api.core.Application.service
         }
         catch (InvalidCpfException)
         {
-//e bom criar um exception com https pra ele retornar direto os erros certos
+            //e bom criar um exception com https pra ele retornar direto os erros certos
             return false;
         }
         catch (InvalidAccount)
@@ -81,11 +80,11 @@ namespace Api.core.Application.service
         {
             verificar.IsValidDigit(cpf);
             await repo.CpfExiste(cpf);
-            campos.cpf = cpf;
+            campos.Cpf = cpf;
         }
         catch (InvalidCpfException)
         {
-            campos.cpf = valores.cpf;
+            campos.Cpf = valores.Cpf;
         }
         try
         {
@@ -100,13 +99,13 @@ namespace Api.core.Application.service
         try
         {
            await IsValidAccount(conta);
-           campos.conta =conta;
+           campos.Conta =conta;
         }
         catch (InvalidAccount)
         {
-            campos.conta = valores.conta;
+            campos.Conta = valores.Conta;
         }
-        campos.isvip = isvip;
+        campos.Isvip = isvip;
        
         if (await repo.UpdateClient(campos, id)==0)
         {

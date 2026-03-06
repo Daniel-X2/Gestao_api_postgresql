@@ -30,11 +30,11 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
         await reader.ReadAsync();
         
         ProdutoDto campos=new();
-        campos.nome=(string)reader["nome"];
-        campos.codigo=(int)reader["codigo"];
-        campos.lote=(int)reader["lote"];
-        campos.quantidade=(int)reader["quantidade"];
-        campos.valor_revenda = (float)reader["valor_revenda"];
+        campos.Nome=(string)reader["nome"];
+        campos.Codigo=(int)reader["codigo"];
+        campos.Lote=(int)reader["lote"];
+        campos.Quantidade=(int)reader["quantidade"];
+        campos.ValorRevenda = (float)reader["valor_revenda"];
         
          
         return campos;
@@ -73,11 +73,11 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
         while (await read.ReadAsync())
         {
             ProdutoDto campos=new();
-            campos.nome=(string)read["nome"];
-            campos.codigo=(int)read["codigo"];
-            campos.quantidade=(int)read["quantidade"];
-            campos.valor_revenda=(float)read["valor_revenda"];
-            campos.lote=(int)read["lote"];
+            campos.Nome=(string)read["nome"];
+            campos.Codigo=(int)read["codigo"];
+            campos.Quantidade=(int)read["quantidade"];
+            campos.ValorRevenda=(float)read["valor_revenda"];
+            campos.Lote=(int)read["lote"];
             lista.lista_prod.Add(campos);
         }
       return lista;
@@ -94,8 +94,8 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
         while(await read.ReadAsync())
         {
             ProdutoDto campos=new();
-            campos.nome=(string)read["nome"];
-            campos.quantidade=(int)read["quantidade"];
+            campos.Nome=(string)read["nome"];
+            campos.Quantidade=(int)read["quantidade"];
 
             lista.lista_prod.Add(campos);
         }
@@ -123,11 +123,11 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
       await   connect.OpenAsync();
 
        await using var cmd = new NpgsqlCommand("INSERT INTO produto (nome ,codigo,quantidade,valor_revenda,lote) VALUES (@nome,@codigo,@quantidade,@valor_revenda,@lote) ",connect);
-        cmd.Parameters.AddWithValue("nome",campos.nome);
-        cmd.Parameters.AddWithValue("codigo", campos.codigo);
-        cmd.Parameters.AddWithValue("quantidade",campos.quantidade);
-        cmd.Parameters.AddWithValue("valor_revenda",campos.valor_revenda);
-        cmd.Parameters.AddWithValue("lote",campos.lote);
+        cmd.Parameters.AddWithValue("nome",campos.Nome);
+        cmd.Parameters.AddWithValue("codigo", campos.Codigo);
+        cmd.Parameters.AddWithValue("quantidade",campos.Quantidade);
+        cmd.Parameters.AddWithValue("valor_revenda",campos.ValorRevenda);
+        cmd.Parameters.AddWithValue("lote",campos.Lote);
         int resultado=await cmd.ExecuteNonQueryAsync();
         return resultado;
 
@@ -139,11 +139,11 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
       await connect.OpenAsync();
 
        await using var cmd = new NpgsqlCommand("UPDATE produto set nome = @nome,codigo=@codigo,quantidade=@quantidade,valor_revenda=@valor_revenda,lote=@lote WHERE id = @id",connect);
-       cmd.Parameters.AddWithValue("nome",campos.nome);
-       cmd.Parameters.AddWithValue("codigo",campos.codigo);
-       cmd.Parameters.AddWithValue("lote",campos.lote);
-       cmd.Parameters.AddWithValue("quantidade",campos.quantidade);
-       cmd.Parameters.AddWithValue("valor_revenda",campos.valor_revenda);
+       cmd.Parameters.AddWithValue("nome",campos.Nome);
+       cmd.Parameters.AddWithValue("codigo",campos.Codigo);
+       cmd.Parameters.AddWithValue("lote",campos.Lote);
+       cmd.Parameters.AddWithValue("quantidade",campos.Quantidade);
+       cmd.Parameters.AddWithValue("valor_revenda",campos.ValorRevenda);
        cmd.Parameters.AddWithValue("id", id);
        int resultado= await cmd.ExecuteNonQueryAsync();
 

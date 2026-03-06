@@ -1,4 +1,6 @@
 
+using System.Runtime.CompilerServices;
+
 namespace Dto
 {
     public class ListaClient
@@ -17,25 +19,26 @@ public class ListaProduto
 public class ClientDto
 {
     public string Nome{get;set;}
-    public string cpf{get;set;}
-    public int conta{get;set;}
-    public bool isvip{get;set;}
+    public string Cpf{get;set;}
+    public int Conta{get;set;}
+    public bool Isvip{get;set;}
     
 }
 public class FuncionarioDto
 {
-    public string nome{get;set;}
-    public string cpf{get;set;}
-    public bool isadmin{get;set;}
-    public int quantidade_atestado{get;set;}
-    public int nascimento{get;set;}
+    
+    public string Nome{get;set;}
+    public string Cpf{get;set;}
+    public bool Isadmin{get;set;}
+    public int QuantidadeAtestado{get;set;}
+    public int Nascimento{get;set;}
 }
 public class ProdutoDto
 {
-    public string nome{get;set;}
-    public int codigo{get;set;}
-    public int quantidade{get;set;}
-    public float valor_revenda{get;set;}
-    public int lote{get;set;}
+    public string Nome{get;set;}
+    public int Codigo{get;set;}
+    public int Quantidade{get;set;}
+    public float ValorRevenda{get;set;}
+    public int Lote{get;set;}
 }
 }
