@@ -4,34 +4,39 @@ using Api.core.Application.repository;
 using System.Reflection;
 namespace Api.core.Application.service
 {
-    public class  Service(IRepositoryFuncionario repo)
+   public interface IServiceFuncionario
+   {
+       public Task<bool> AddService(string nome, string cpf, int quantidadeAtestado, int nascimento,
+           bool isadmin);
+
+       Task<bool> UpdateFuncionarioService(FuncionarioDto campos, int id);
+       Task<bool> DeleteFuncionarioService(int id);
+       
+   }
+    public class  ServiceFuncionario(IRepositoryFuncionario repo):IServiceFuncionario
     {
-        public async Task IsValidCpf(string cpf)
-        {
-            Validation verificador = new();
-            verificador.IsValidDigit(cpf);
-            if (await repo.IsExistsCpf(cpf) )
-            {
-                throw new InvalidCpfException(cpf);
-            }
-        
-        }
+       
         public async Task<bool> AddService(string nome,string cpf,int quantidadeAtestado,int nascimento,bool isadmin)
         {
             
+            
             FuncionarioDto campos=new();
+            
             Validation verificador = new();
-            campos.Cpf = cpf;
+            //campos.Cpf = cpf;
             campos.Nome = nome;
             campos.QuantidadeAtestado = quantidadeAtestado;
             campos.Nascimento = nascimento;
             campos.Isadmin = isadmin;
             try
-            {
+            { 
                 verificador.VerificarNome(nome);
-                await IsValidCpf(cpf);
                 verificador.IsValidNascimento(nascimento);
-
+                campos.Cpf = verificador.IsValidDigit(cpf);
+                if (await repo.IsExistsCpf(cpf))
+                {
+                    throw new InvalidCpfException(cpf);
+                }
             }
             catch (InvalidNameException )
             {
@@ -58,11 +63,11 @@ namespace Api.core.Application.service
             
             //FuncionarioDto campos = new();
             Validation verificar = new();
-            //
+            // devo fazer um return dos campos que nao foram atualizados
             var valores =await  repo.GetById(id);
             if (string.IsNullOrWhiteSpace(valores.Nome))
             {
-                throw new ReturnDataIsEmpty(MethodBase.GetCurrentMethod().Name);
+                throw new InvalidIdException(id);
             }
             try
             {
@@ -102,11 +107,25 @@ namespace Api.core.Application.service
             }
             return true;
         }
-
-        public async Task<bool> DeleteFuncionarioService()
+    
+        public async Task<bool> DeleteFuncionarioService(int id)
         {
-            
+            if (await repo.DeleteFuncionario(id) == 0)
+            {
+                throw new InvalidIdException(id);
+            }
+            return true;
         }
+        public async Task<FuncionarioDto> GetByIdService(int id)
+        {
+            FuncionarioDto resultado= await repo.GetById(id);
+            if (string.IsNullOrWhiteSpace(resultado.Nome))
+            {
+                throw new ReturnDataIsEmpty();
+            }
+            return resultado;
+        }
+        
     }
 }
 

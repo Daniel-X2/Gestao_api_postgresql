@@ -33,6 +33,9 @@ public class FuncionarioDto
     public int QuantidadeAtestado{get;set;}
     public int Nascimento{get;set;}
 }
+
+
+
 public class ProdutoDto
 {
     public string Nome{get;set;}

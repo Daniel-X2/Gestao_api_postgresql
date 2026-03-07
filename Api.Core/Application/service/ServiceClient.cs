@@ -1,4 +1,4 @@
-using System.Reflection;
+
 using Utils;
 using Dto;
 using Api.core.Application.repository;
@@ -16,7 +16,15 @@ namespace Api.core.Application.service
     }
     class ClientService(IRepositoryClient repo):IService
 {
-
+    public async Task<ClientDto> GetByIdService(int id)
+    {
+        ClientDto resultado= await repo.GetById(id);
+        if (string.IsNullOrWhiteSpace(resultado.Nome))
+        {
+            throw new ReturnDataIsEmpty();
+        }
+        return resultado;
+    }
     public async Task<ListaClient> GetAllService()//
     {
     
@@ -24,7 +32,7 @@ namespace Api.core.Application.service
         ListaClient valores= await repo.GetAllClient();
         if(valores.lista_client.Count==0)
         {
-            throw new ReturnDataIsEmpty("GetAllService");
+            throw new ReturnDataIsEmpty();
         }
         
         return  valores;
@@ -33,16 +41,19 @@ namespace Api.core.Application.service
     {
         ClientDto campos=new();
         Validation verificador = new();
-        campos.Cpf = cpf;
+        
         campos.Nome = nome;
         campos.Isvip = isvip;
         campos.Conta = conta;
         try
         {
             verificador.VerificarNome(nome);
-            await IsValidCpf(cpf);
+            campos.Cpf = verificador.IsValidDigit(cpf);
             await IsValidAccount(conta);
-
+            if (await repo.IsExistsCpf(cpf))
+            {
+                throw new InvalidCpfException(cpf);
+            }
         }
         catch (InvalidNameException )
         {
@@ -74,12 +85,12 @@ namespace Api.core.Application.service
         var valores =await  repo.GetById(id);
         if (string.IsNullOrWhiteSpace(valores.Nome))
         {
-            throw new ReturnDataIsEmpty(MethodBase.GetCurrentMethod().Name);
+            throw new InvalidIdException(id);
         }
         try
         {
             verificar.IsValidDigit(cpf);
-            await repo.CpfExiste(cpf);
+            await repo.IsExistsCpf(cpf);
             campos.Cpf = cpf;
         }
         catch (InvalidCpfException)
@@ -118,7 +129,7 @@ namespace Api.core.Application.service
     {
       if ( await repo.DeleteClient(id)==0)
       {
-          throw new ReturnDataIsEmpty("DeleteService");
+          throw new InvalidIdException(id);
       }
       return true;
     }
@@ -139,7 +150,7 @@ namespace Api.core.Application.service
     {
         Validation verificador = new();
         verificador.IsValidDigit(cpf);
-        if (await repo.CpfExiste(cpf) )
+        if (await repo.IsExistsCpf(cpf) )
         {
             throw new InvalidCpfException(cpf);
         }

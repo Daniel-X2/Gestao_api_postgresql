@@ -9,7 +9,7 @@ public interface  IRepositoryClient
    internal Task<ClientDto> GetById(int id);
    internal Task<int> AddClient(string nome,string cpf,int conta,bool isvip);
    internal Task<bool> ContaExiste(int conta);
-   internal Task<bool> CpfExiste(string cpf);
+   internal Task<bool> IsExistsCpf(string cpf);
    internal Task<int> UpdateClient(ClientDto campos, int id);
    internal Task<int> DeleteClient(int id);
    internal Task<int> GetIdByCpf(string cpf);
@@ -94,7 +94,7 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
        return resultado;
        
     }
-    public async Task<bool> CpfExiste(string cpf)
+    public async Task<bool> IsExistsCpf(string cpf)
     {
         await using NpgsqlConnection connect =host.Connect();
         await connect.OpenAsync();

@@ -40,3 +40,8 @@ public class InvalidNascimentoException : Exception
 
     public InvalidNascimentoException(int nascimento) : base($"o ano de nascimento nao e valido "){}
 }
+
+public class InvalidIdException : Exception
+{
+    public InvalidIdException(int id):base($"O Id {id} Nao corresponde a nenhum indice"){}
+}

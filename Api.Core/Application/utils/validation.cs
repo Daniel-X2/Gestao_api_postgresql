@@ -1,27 +1,31 @@
 
+using System.Text;
+
 
 namespace Utils
 { 
     class Validation
     {
    
-    public bool IsValidDigit(string cpf)
+    public string IsValidDigit(string cpf)
     {
         
         if (string.IsNullOrWhiteSpace(cpf))
         {
             throw new InvalidCpfException(cpf);
         }
+
+        StringBuilder CPF = new StringBuilder(string.Empty,11);
         
-        string CPF=null;
+            
         for (int c=0;c<cpf.Length;c++ )
         {
             if (char.IsNumber(cpf[c]))
             {
-                CPF=$"{CPF}{cpf[c]}";
+                CPF.Append(cpf[c]);
             }
         }
-        cpf = CPF;
+        cpf = CPF.ToString();
         
         if (cpf.Length != 11)
         {
@@ -38,7 +42,7 @@ namespace Utils
         {
             throw new InvalidCpfException(cpf);
         }
-        return true;
+        return cpf;
         
         
     }
@@ -111,20 +115,28 @@ namespace Utils
     public bool IsValidNascimento(int ano)
     {
         int anoAtual = DateTime.Now.Year;
+        int idade_maxima = 85;
+        int idade_minima = 18;
         if (ano > anoAtual || int.IsNegative(anoAtual))
         {
             throw new InvalidNascimentoException(ano);
         }
-        if (anoAtual - ano > 85 || anoAtual - ano <18 )
+        if (anoAtual - ano > idade_maxima || anoAtual - ano <idade_minima )
         {
             throw new InvalidNascimentoException(ano);
         }
 
         return true;
-        
-        
-       Console.WriteLine(); 
-        return true;
     }
+
+    
+        
+        
+            
+        
+           
+        
+
+      
     }
 }
