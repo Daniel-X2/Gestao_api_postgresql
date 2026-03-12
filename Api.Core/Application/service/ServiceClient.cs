@@ -5,7 +5,7 @@ using Api.core.Application.repository;
 
 namespace Api.core.Application.service
 {
-    public interface IService
+    public interface IServiceCLient
     {
         Task<ListaClient> GetAllService();
 
@@ -14,7 +14,7 @@ namespace Api.core.Application.service
         Task<bool> AddService(string nome, string cpf, int conta, bool isvip);
         Task<bool> DeleteService(int id);
     }
-    class ClientService(IRepositoryClient repo):IService
+    class ClientService(IRepositoryClient repo):IServiceCLient
 {
     public async Task<ClientDto> GetByIdService(int id)
     {
@@ -90,32 +90,30 @@ namespace Api.core.Application.service
         try
         {
             verificar.IsValidDigit(cpf);
-            await repo.IsExistsCpf(cpf);
-            campos.Cpf = cpf;
+
+            if (await repo.IsExistsCpf(cpf))
+            {
+                campos.Cpf = cpf;
+            }
+            
         }
         catch (InvalidCpfException)
         {
             campos.Cpf = valores.Cpf;
         }
-        try
-        {
-            verificar.VerificarNome(nome);
+        if(!verificar.VerificarNome(nome)){
+  
             campos.Nome = nome;
         }
-        catch (InvalidNameException)
-        {
-             campos.Nome = valores.Nome;
-        }
 
-        try
+
+
+        if (!await IsValidAccount(conta))
         {
-           await IsValidAccount(conta);
-           campos.Conta =conta;
+            campos.Conta =conta;
         }
-        catch (InvalidAccount)
-        {
-            campos.Conta = valores.Conta;
-        }
+           
+           
         campos.Isvip = isvip;
        
         if (await repo.UpdateClient(campos, id)==0)
@@ -134,16 +132,17 @@ namespace Api.core.Application.service
       return true;
     }
 
-    public async Task IsValidAccount(int account)
+    public async Task<bool> IsValidAccount(int account)
     {
         if (int.IsNegative(account))
         {
-            throw new InvalidAccount(account);
+            return false;
         }
         if(await repo.ContaExiste(account))
         {
-            throw new InvalidAccount(account);
+            return false;
         }
+        return true;
     }
 
     public async Task IsValidCpf(string cpf)

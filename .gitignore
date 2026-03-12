@@ -13,3 +13,4 @@ host.txt
 Api/.env
 Api/obj/Api.csproj.nuget.dgspec.json
 /Api/obj
+/WebApplication1

@@ -3,9 +3,9 @@ using Api.core.Application.service;
 using Api.core.Application.utils;
 
 
-public class TESTE
+public class AddScope
 {
-    public void TEaSTE(WebApplicationBuilder builder)
+    public void AddScopeFuncion(WebApplicationBuilder builder)
     {
         
         builder.Services.AddScoped<IConnect, ConnectHost>();

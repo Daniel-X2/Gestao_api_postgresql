@@ -93,36 +93,31 @@ namespace Api.core.Application.service
             {
                 throw new InvalidIdException(id);
             }
+
             try
             {
                 verificar.IsValidDigit(campos.Cpf);
-                await repo.IsExistsCpf(campos.Cpf);
-                
+                if ( await repo.IsExistsCpf(campos.Cpf))
+                {
+                    campos.Cpf = valores.Cpf;
+                }
             }
             catch (InvalidCpfException)
             {
                 campos.Cpf = valores.Cpf;
-            }
-            try
-            {
-                verificar.VerificarNome(campos.Nome);
-                //campos.Nome = nome;
-            }
-            catch (InvalidNameException)
-            {
-                campos.Nome = valores.Nome;
+
             }
 
-            try
+            if (!verificar.VerificarNome(campos.Nome))
             {
-                verificar.IsValidNascimento(campos.Nascimento);
-                //campos.Conta =conta;
+                 campos.Nome = valores.Nome;
             }
-            catch (InvalidNascimentoException)
+
+            if (!verificar.IsValidNascimento(campos.Nascimento))
             {
                 campos.Nascimento = valores.Nascimento;
             }
-
+            
             campos.Isadmin = valores.Isadmin;
        
             if (await repo.UpdateFuncionario(campos, id)==0)
@@ -142,20 +137,15 @@ namespace Api.core.Application.service
         }
         public async Task<FuncionarioDto> GetByIdService(int id)
         {
-            try
-            {
-                FuncionarioDto resultado= await repo.GetById(id);
-                if (string.IsNullOrWhiteSpace(resultado.Nome))
-                {
-                    throw new ReturnDataIsEmpty();
-                }
-
-                return resultado;
-            }
-            catch (Exception e)
+            
+            FuncionarioDto resultado= await repo.GetById(id);
+            if (string.IsNullOrWhiteSpace(resultado.Nome))
             {
                 throw new ReturnDataIsEmpty();
             }
+
+            return resultado;
+            
             
             
         }

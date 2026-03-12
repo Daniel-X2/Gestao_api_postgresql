@@ -1,7 +1,6 @@
 
 
 
-
 public class InvalidCpfException : Exception
 {
     public InvalidCpfException() {}
@@ -22,12 +21,12 @@ public class ErroAddToDatabaseException : Exception
     public ErroAddToDatabaseException(string localerro):base($"O ERRO ACONTECEU NO {localerro}"){}
 }
 
-public class ReturnDataIsEmpty : Exception
+public class  ReturnDataIsEmpty : Exception
 {
-    public ReturnDataIsEmpty(){}
-    public ReturnDataIsEmpty(string localErro) : base($"erro no {localErro}"){}
-}
+    //public ReturnDataIsEmpty(){}
 
+    public ReturnDataIsEmpty() { }
+}
 public class InvalidAccount : Exception
 {
     public InvalidAccount(){}

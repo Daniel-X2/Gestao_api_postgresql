@@ -1,21 +1,21 @@
 using Api.core.Application.service;
-using Api.core.Application.utils;
-using Api.core.Application.repository;
-using Microsoft.AspNetCore.Mvc;
+
+using Dto;
+
 
 namespace api.Routers;
 
-public class RoutersFuncionario(WebApplication app)
+public class RoutersFuncionario
 {
         
-        public async  Task Router()
+        public static async  Task Router(WebApplication app)
         {
             
-            app.MapGet("/funcionario/get",async (IServiceFuncionario n1) =>
+            app.MapGet("/funcionario/get",async Task<ListaFuncionario> (IServiceFuncionario n1) =>
             {
-                
+              
                 var n2= await n1.GetAll();
-                return n2.lista_funci ;
+                return n2 ;
                 
             });
             
@@ -25,17 +25,31 @@ public class RoutersFuncionario(WebApplication app)
                 var campo =await n1.GetByIdService(id);
                 return campo;
             });
-            app.MapDelete("/Funcionario/delete/{id}", async Task<string> (int id,IServiceFuncionario n1) =>
+            app.MapDelete("/Funcionario/delete/{id}", async Task<IResult> (int id,IServiceFuncionario n1) =>
             {
                 bool resultado =await n1.DeleteFuncionarioService(id);
-                return "aaaaa";
+              
                 if (resultado)
                 {
-                    //return new OkObjectResult("55");
+                    return  Results.Ok();
                 }
-
-                // return new BadRequestResult();
+                return  Results.BadRequest();
             });
+            app.MapPost("/funcionario/add/{nome},{cpf},{isadmin},{quantidadeAtestado},{nascimento}", 
+                    async Task<IResult> (string nome,string cpf, bool isadmin, 
+                    int quantidadeAtestado,int nascimento, IServiceFuncionario service) =>
+                    {
+                     bool resultado=  await service.AddService(nome,cpf,quantidadeAtestado,nascimento, isadmin);
+                     if (resultado)
+                     {
+                       return  Results.Ok("adicionado com sucesso");
+                     }
+
+                     return Results.BadRequest("erro ao adicionar");
+                     
+                    });
+            
+            
         }
         
         

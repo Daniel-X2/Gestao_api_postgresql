@@ -9,9 +9,10 @@ namespace Dto
     }
 
     
+    
 public class ListaFuncionario
 {
-    public List<FuncionarioDto> lista_funci {get;set;}= new List<FuncionarioDto>();
+    public List<FuncionarioDto> lista_funci {get;set;}= new ();
 }
 public class ListaProduto
 {
