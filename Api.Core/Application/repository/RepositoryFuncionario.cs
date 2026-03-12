@@ -1,10 +1,11 @@
 
 using Npgsql;
 using Dto;
+using Api.core.Application.utils;
 
 namespace Api.core.Application.repository
-{
-    public interface IRepositoryFuncionario
+{ 
+public interface IRepositoryFuncionario
     { 
    internal Task<bool> IsExistsCpf(string cpf);
    internal Task<ListaFuncionario> GetFuncionario();
@@ -14,7 +15,7 @@ namespace Api.core.Application.repository
    internal Task<int> GetIdByCpf(string cpf);
    internal Task<FuncionarioDto> GetById(int id);
     }
-class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
+internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
 {
     public async Task<int> GetIdByCpf(string cpf)
     {

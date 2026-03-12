@@ -1,5 +1,5 @@
 
-using System.Runtime.CompilerServices;
+
 
 namespace Dto
 {
@@ -7,6 +7,7 @@ namespace Dto
     {
         public List<ClientDto> lista_client {get;set;}= new List<ClientDto>();
     }
+
     
 public class ListaFuncionario
 {

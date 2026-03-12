@@ -45,3 +45,23 @@ public class InvalidIdException : Exception
 {
     public InvalidIdException(int id):base($"O Id {id} Nao corresponde a nenhum indice"){}
 }
+
+public class InvalidConnection: Exception
+{
+    public InvalidConnection() : base("A conexao foi falha "){}
+}
+
+public class InvalidCodeException : Exception
+{
+    public InvalidCodeException(int codigo):base($"o codigo inserido {codigo} ja existe ou e invalido"){}
+}
+
+public class InvalidQuantityException : Exception
+{
+    public  InvalidQuantityException():base("a quantidade inserida e invalida"){}
+}
+
+public class InvalidLoteException : Exception
+{
+    public InvalidLoteException(int lote) : base($"o lote {lote} ja existe ou e um numero negativo"){}
+}

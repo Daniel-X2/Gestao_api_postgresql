@@ -1,5 +1,6 @@
 using Npgsql;
 using Dto;
+using Api.core.Application.utils;
 
 namespace Api.core.Application.repository
 {

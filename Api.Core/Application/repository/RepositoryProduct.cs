@@ -1,6 +1,7 @@
 
 using Npgsql;
 using Dto;
+using Api.core.Application.utils;
 
 namespace Api.core.Application.repository
 {
@@ -13,7 +14,8 @@ namespace Api.core.Application.repository
     internal Task<int> UpdateProduct(ProdutoDto campos, int id);
     internal  Task<int> DeleteProduct(int id);
    internal Task<ProdutoDto> GetProductById(int id);
-
+  internal Task<bool> IsExistLote(int lote);
+  internal Task<bool> IsExistCode(int codigo);
 }
 class RepositoryProduct(IConnect host):IRepositoryProduct
 {
@@ -64,11 +66,10 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
     {
         
        await using NpgsqlConnection connect=host.Connect();;
-        await connect.OpenAsync();
-
-        await using var cmd = new NpgsqlCommand("SELECT * FROM produto",connect);
+       await connect.OpenAsync();
+       await using var cmd = new NpgsqlCommand("SELECT * FROM produto",connect);
        await using var read= await  cmd.ExecuteReaderAsync();
-        ListaProduto lista=new();
+       ListaProduto lista=new();
         
         while (await read.ReadAsync())
         {
@@ -80,16 +81,16 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
             campos.Lote=(int)read["lote"];
             lista.lista_prod.Add(campos);
         }
-      return lista;
+        return lista;
      }
     public  async Task<ListaProduto> GetEstoque()
     {
        
        await using NpgsqlConnection connect=host.Connect();
-        await connect.OpenAsync();
+       await connect.OpenAsync();
 
        await using var cmd=new NpgsqlCommand("SELECT nome,quantidade FROM produto",connect);
-        var read=await cmd.ExecuteReaderAsync();
+       var read=await cmd.ExecuteReaderAsync();
         ListaProduto lista=new();
         while(await read.ReadAsync())
         {

@@ -48,7 +48,7 @@ namespace Utils
     }
     public bool VerificarNome(string nome)
     {
-        if (string.IsNullOrWhiteSpace(nome))
+        if (string.IsNullOrWhiteSpace(nome) || nome.Length<4)
         {
             return false;
         }
@@ -117,6 +117,7 @@ namespace Utils
         int anoAtual = DateTime.Now.Year;
         int idade_maxima = 85;
         int idade_minima = 18;
+        
         if (ano > anoAtual || int.IsNegative(anoAtual))
         {
             throw new InvalidNascimentoException(ano);

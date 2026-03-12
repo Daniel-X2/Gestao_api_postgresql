@@ -9,3 +9,7 @@ Api.test/obj
 Api.test/bin
 Api/obj/Debug/net8.0/Api.csproj.FileListAbsolute.txt
 host.txt
+/.idea
+Api/.env
+Api/obj/Api.csproj.nuget.dgspec.json
+/Api/obj
