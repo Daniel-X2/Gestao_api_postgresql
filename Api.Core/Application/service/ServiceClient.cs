@@ -9,9 +9,8 @@ namespace Api.core.Application.service
     {
         Task<ListaClient> GetAllService();
 
-        Task<bool> UpdateService(int id, string nome = null, string cpf = null, int conta = 0,
-            bool isvip = false);
-        Task<bool> AddService(string nome, string cpf, int conta, bool isvip);
+        Task<bool> UpdateService(int id, ClientDto campos);
+        Task<bool> AddService(ClientDto campos);
         Task<bool> DeleteService(int id);
     }
     class ClientService(IRepositoryClient repo):IServiceCLient
@@ -37,22 +36,20 @@ namespace Api.core.Application.service
         
         return  valores;
     }
-    public async Task<bool> AddService(string nome,string cpf,int conta, bool isvip)//
+    public async Task<bool> AddService(ClientDto campos)//
     {
-        ClientDto campos=new();
+       
         Validation verificador = new();
         
-        campos.Nome = nome;
-        campos.Isvip = isvip;
-        campos.Conta = conta;
+        
         try
         {
-            verificador.VerificarNome(nome);
-            campos.Cpf = verificador.IsValidDigit(cpf);
-            await IsValidAccount(conta);
-            if (await repo.IsExistsCpf(cpf))
+            verificador.VerificarNome(campos.Nome);
+            campos.Cpf = verificador.IsValidDigit(campos.Cpf);
+            await IsValidAccount(campos.Conta);
+            if (await repo.IsExistsCpf(campos.Cpf))
             {
-                throw new InvalidCpfException(cpf);
+                throw new InvalidCpfException(campos.Cpf);
             }
         }
         catch (InvalidNameException )
@@ -68,7 +65,7 @@ namespace Api.core.Application.service
         {
             return false;
         }
-        int resultado= await repo.AddClient(nome,cpf,conta,isvip);
+        int resultado= await repo.AddClient(campos);
         if (resultado ==0)
         {
              throw new ErroAddToDatabaseException("AddService");
@@ -76,10 +73,10 @@ namespace Api.core.Application.service
         return true;
     }
 
-    public async Task<bool> UpdateService(int id, string nome = null, string cpf = null, int conta = 0,
-        bool isvip = false)
+    public async Task<bool> UpdateService(int id,
+        ClientDto campos)
     {
-        ClientDto campos = new();
+      
         Validation verificar = new();
         //
         var valores =await  repo.GetById(id);
@@ -87,34 +84,28 @@ namespace Api.core.Application.service
         {
             throw new InvalidIdException(id);
         }
-        try
-        {
-            verificar.IsValidDigit(cpf);
+       
+        verificar.IsValidDigit(campos.Cpf);
 
-            if (await repo.IsExistsCpf(cpf))
-            {
-                campos.Cpf = cpf;
-            }
+        if (await repo.IsExistsCpf(campos.Cpf))
+        {
+                campos.Cpf = valores.Cpf;
+        }
             
-        }
-        catch (InvalidCpfException)
-        {
-            campos.Cpf = valores.Cpf;
-        }
-        if(!verificar.VerificarNome(nome)){
+        
+        
+        if(!verificar.VerificarNome(campos.Nome)){
   
-            campos.Nome = nome;
+            campos.Nome = valores.Nome;
         }
 
-
-
-        if (!await IsValidAccount(conta))
+        if (!await IsValidAccount(campos.Conta))
         {
-            campos.Conta =conta;
+            campos.Conta =valores.Conta;
         }
            
            
-        campos.Isvip = isvip;
+        
        
         if (await repo.UpdateClient(campos, id)==0)
         {

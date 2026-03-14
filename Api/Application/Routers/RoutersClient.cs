@@ -9,10 +9,11 @@ public class RoutersClient
 {
     public static async Task Routers(WebApplication app)
     {
-        app.MapGet("/client/get", async Task<ListaClient> (IServiceCLient service) =>
+        app.MapGet("/client/get/", async Task<ListaClient> (IServiceCLient service) =>
         {
          ListaClient lista=  await service.GetAllService();
-         return lista;
+         
+         return lista ;
         });
         app.MapDelete("client/delete/{id}", async Task<IResult> (int id,IServiceCLient service) =>
         {
@@ -23,15 +24,27 @@ public class RoutersClient
           }
           return Results.BadRequest("nao foi possivel deletar");
         });
-        app.MapPost("client/add/{nome},{cpf},{isvip},{conta}", async Task<IResult> (string nome,string cpf,bool isvip,int conta,IServiceCLient service) =>
+        app.MapPost("client/add/", async Task<IResult> (ClientDto campos,IServiceCLient service) =>
         {
-        bool resultado=  await  service.AddService(nome, cpf, conta, isvip);
+        bool resultado=  await  service.AddService(campos);
         if (resultado)
         {
           return  Results.Ok("adicionado com sucesso");
         }
         return Results.BadRequest("erro ao adicionar");
-        
         });
+        app.MapPut("client/update/{id}/", async Task<IResult> (int id, ClientDto campos, IServiceCLient service) =>
+        {
+          bool resultado= await service.UpdateService(id,campos);
+          if (resultado)
+          {
+              return  Results.Ok("atualizado com sucesso");
+          }
+
+          return Results.BadRequest("erro ao atualizar");
+        });
+        
+        
+
     }
 }

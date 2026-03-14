@@ -13,7 +13,7 @@ public class RoutersFuncionario
             
             app.MapGet("/funcionario/get",async Task<ListaFuncionario> (IServiceFuncionario n1) =>
             {
-              
+              //e bom retornar com id pra se caso eu quiser deletar depois
                 var n2= await n1.GetAll();
                 return n2 ;
                 
@@ -35,11 +35,9 @@ public class RoutersFuncionario
                 }
                 return  Results.BadRequest();
             });
-            app.MapPost("/funcionario/add/{nome},{cpf},{isadmin},{quantidadeAtestado},{nascimento}", 
-                    async Task<IResult> (string nome,string cpf, bool isadmin, 
-                    int quantidadeAtestado,int nascimento, IServiceFuncionario service) =>
+            app.MapPost("/funcionario/add/",async Task<IResult> (FuncionarioDto campos, IServiceFuncionario service) =>
                     {
-                     bool resultado=  await service.AddService(nome,cpf,quantidadeAtestado,nascimento, isadmin);
+                     bool resultado=  await service.AddService(campos);
                      if (resultado)
                      {
                        return  Results.Ok("adicionado com sucesso");
@@ -48,8 +46,16 @@ public class RoutersFuncionario
                      return Results.BadRequest("erro ao adicionar");
                      
                     });
-            
-            
+            app.MapPut("funcionario/update/{id}/", async Task<IResult> (int id,FuncionarioDto campos, IServiceFuncionario service) =>
+            {
+            bool resultado=  await  service.UpdateFuncionarioService(campos, id);
+            if (resultado)
+            {
+                return  Results.Ok("atualizado com sucesso");
+            }
+            return Results.BadRequest("erro ao atualizar");
+            });
+
         }
         
         

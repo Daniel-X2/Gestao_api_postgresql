@@ -5,8 +5,7 @@ namespace Api.core.Application.service
 {
    public interface IServiceFuncionario
    {
-       public Task<bool> AddService(string nome, string cpf, int quantidadeAtestado, int nascimento,
-           bool isadmin);
+       public Task<bool> AddService(FuncionarioDto campos);
 
       public Task<bool> UpdateFuncionarioService(FuncionarioDto campos, int id);
       public Task<bool> DeleteFuncionarioService(int id); 
@@ -28,26 +27,22 @@ namespace Api.core.Application.service
            return lista;
        }
 
-        public async Task<bool> AddService(string nome, string cpf, int quantidadeAtestado, int nascimento, bool isadmin)
+        public async Task<bool> AddService(FuncionarioDto campos)
        {
 
 
-           FuncionarioDto campos = new();
-
+          
            Validation verificador = new();
            //campos.Cpf = cpf;
-           campos.Nome = nome;
-           campos.QuantidadeAtestado = quantidadeAtestado;
-           campos.Nascimento = nascimento;
-           campos.Isadmin = isadmin;
+           
            try
            {
-               verificador.VerificarNome(nome);
-               verificador.IsValidNascimento(nascimento);
-               campos.Cpf = verificador.IsValidDigit(cpf);
-               if (await repo.IsExistsCpf(cpf))
+               verificador.VerificarNome(campos.Nome);
+               verificador.IsValidNascimento(campos.Nascimento);
+               campos.Cpf = verificador.IsValidDigit(campos.Cpf);
+               if (await repo.IsExistsCpf(campos.Cpf))
                {
-                   throw new InvalidCpfException(cpf);
+                   throw new InvalidCpfException(campos.Cpf);
                }
            }
            catch (InvalidNameException)

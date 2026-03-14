@@ -1,12 +1,11 @@
 using Api.core.Application.repository;
 using Dto;
-using Microsoft.Extensions.Options;
 using Utils;
 
-interface IServiceProduct
+public interface IServiceProduct
 {
-  public  Task<ListaProduto> GetAll();
-  public  Task<bool> AddProduct(string nome, int codigo, int quantidade, float valor_revenda, int lote);
+  public  Task<ListaProduto> GetAllProduct();
+  public Task<bool> AddProduct(ProdutoDto campos);
   public Task<bool> DeleteProduct(int id);
   public Task<ListaProduto>  GetEstoque();
   public Task<List<float>> GetValorBruto();
@@ -15,7 +14,7 @@ interface IServiceProduct
 }
 class ServiceProduct(IRepositoryProduct repo):IServiceProduct
 {
-    public async Task<ListaProduto> GetAll()
+    public async Task<ListaProduto> GetAllProduct()
     {
        
        ListaProduto  lista =await repo.GetAllProduct();
@@ -27,39 +26,35 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
        return lista;
     }
 
-    public async Task<bool> AddProduct(string nome,int codigo,int quantidade,float valor_revenda,int lote)
+    public async Task<bool> AddProduct(ProdutoDto campos)
     {
         
             var validation = new Validation();
-            if (!validation.VerificarNome(nome))
+            if (!validation.VerificarNome(campos.Nome))
             {
                 throw new InvalidNameException();
             }
-            if (await repo.IsExistCode(codigo) || int.IsNegative(codigo))
+            if (await repo.IsExistCode(campos.Codigo) || int.IsNegative(campos.Codigo))
             {
-                throw new InvalidCodeException(codigo);
+                throw new InvalidCodeException(campos.Codigo);
             }
-            if (quantidade<=0)
+            if (campos.Quantidade<=0)
             {
                 throw new InvalidQuantityException();
             }
 
-            if (valor_revenda<=0)
+            if (campos.ValorRevenda<=0)
             {
                 throw new ArgumentException("aqui ta ruim");
             }
 
-            if (await repo.IsExistLote(lote) || lote<=0)
+            if (await repo.IsExistLote(campos.Lote) || campos.Lote<=0)
             {
-                throw new InvalidLoteException(lote);
+                throw new InvalidLoteException(campos.Lote);
             }
 
-            ProdutoDto campos = new();
-            campos.Nome = nome;
-            campos.Codigo = codigo;
-            campos.Lote = lote;
-            campos.Quantidade = quantidade;
-            campos.ValorRevenda = valor_revenda;
+         
+            
 
             int resultado = await repo.AddProduct(campos);
             switch (resultado)

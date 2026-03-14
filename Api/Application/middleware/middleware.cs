@@ -69,5 +69,10 @@ public class ExceptionHandlingMiddleware
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(new { erro = "errrroooo aquiii" });
         }
+        catch (Exception e)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsJsonAsync(new { erro = "olaa"});
+        }
     }
 }

@@ -8,7 +8,7 @@ public interface  IRepositoryClient
 {
    internal Task<ListaClient>  GetAllClient();
    internal Task<ClientDto> GetById(int id);
-   internal Task<int> AddClient(string nome,string cpf,int conta,bool isvip);
+   internal Task<int> AddClient(ClientDto campos);
    internal Task<bool> ContaExiste(int conta);
    internal Task<bool> IsExistsCpf(string cpf);
    internal Task<int> UpdateClient(ClientDto campos, int id);
@@ -65,7 +65,8 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
          
         return campos;
     }
-    public  async Task<int> AddClient(string nome,string cpf,int conta,bool isvip)
+
+    public async Task<int> AddClient(ClientDto campos)
     {
         int resultado;
         
@@ -75,10 +76,10 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
 
         await using (var cmd = new NpgsqlCommand("INSERT INTO cliente (nome ,cpf, conta,isvip) VALUES (@nome, @cpf, @conta,@isvip)", connect))
         {
-            cmd.Parameters.AddWithValue("nome", nome);
-            cmd.Parameters.AddWithValue("cpf", cpf);
-            cmd.Parameters.AddWithValue("conta", conta);
-            cmd.Parameters.AddWithValue("isvip", isvip);
+            cmd.Parameters.AddWithValue("nome", campos.Nome);
+            cmd.Parameters.AddWithValue("cpf", campos.Cpf);
+            cmd.Parameters.AddWithValue("conta", campos.Conta);
+            cmd.Parameters.AddWithValue("isvip", campos.Isvip);
             resultado=await cmd.ExecuteNonQueryAsync();
         }
         

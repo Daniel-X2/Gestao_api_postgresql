@@ -12,16 +12,17 @@ namespace api
         {
          
             WebApplicationBuilder builder = WebApplication.CreateBuilder();
-            AddScope N1 = new();
+            AddScope scope = new();
             
-            N1.AddScopeFuncion(builder);
+            scope.AddScopeFuncion(builder);
             
             var app = builder.Build();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
-             await Routers.RoutersFuncionario.Router(app);
-             
-            app.Run();
+
+            Routers.routersMain.Teste(app);
+           
+           app.Run();
             
         }
     }
