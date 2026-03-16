@@ -1,22 +1,22 @@
 using Dto;
+using Api.Core.Application.service;
 
 
+namespace Api.Routers;
 
-namespace api.Routers;
-
-public class RoutersProduct
+public class ProductRouters
 {
-    public static async Task Routers(WebApplication app)
+    public async Task Routers(WebApplication app)
     {
-        app.MapGet("/estoque/get", async Task<ListaProduto> (IServiceProduct service) =>
+        app.MapGet("/estoque/get", async Task<ListaProduct> (IServiceProduct service) =>
         { 
-            ListaProduto lista= await service.GetEstoque();
+            ListaProduct lista= await service.GetEstoque();
             
             return lista;
         });
-        app.MapGet("/product/get", async Task<ListaProduto> (IServiceProduct service) =>
+        app.MapGet("/product/get", async Task<ListaProduct> (IServiceProduct service) =>
         {
-            ListaProduto lista = await service.GetAllProduct();
+            ListaProduct lista = await service.GetAllProduct();
             return lista;
             
         });

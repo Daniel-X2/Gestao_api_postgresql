@@ -15,17 +15,17 @@ namespace Utils
             throw new InvalidCpfException(cpf);
         }
 
-        StringBuilder CPF = new StringBuilder(string.Empty,11);
+        StringBuilder _cpf = new StringBuilder(string.Empty,11);
         
             
         for (int c=0;c<cpf.Length;c++ )
         {
             if (char.IsNumber(cpf[c]))
             {
-                CPF.Append(cpf[c]);
+                _cpf.Append(cpf[c]);
             }
         }
-        cpf = CPF.ToString();
+        cpf = _cpf.ToString();
         
         if (cpf.Length != 11)
         {
@@ -115,29 +115,20 @@ namespace Utils
     public bool IsValidNascimento(int ano)
     {
         int anoAtual = DateTime.Now.Year;
-        int idade_maxima = 85;
-        int idade_minima = 18;
+        int idadeMaxima = 85;
+        int idadeMinima = 18;
         
         if (ano > anoAtual || int.IsNegative(anoAtual))
         {
             throw new InvalidNascimentoException(ano);
         }
-        if (anoAtual - ano > idade_maxima || anoAtual - ano <idade_minima )
+        if (anoAtual - ano > idadeMaxima || anoAtual - ano <idadeMinima )
         {
             throw new InvalidNascimentoException(ano);
         }
 
         return true;
     }
-
     
-        
-        
-            
-        
-           
-        
-
-      
     }
 }

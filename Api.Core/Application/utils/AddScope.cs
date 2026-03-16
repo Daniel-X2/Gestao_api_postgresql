@@ -1,6 +1,6 @@
-using Api.core.Application.repository;
-using Api.core.Application.service;
-using Api.core.Application.utils;
+using Api.Core.Application.repository;
+using Api.Core.Application.service;
+using Api.Core.Application.utils;
 
 
 public class AddScope

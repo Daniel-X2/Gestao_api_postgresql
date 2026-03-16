@@ -1,9 +1,9 @@
 
 using Utils;
 using Dto;
-using Api.core.Application.repository;
+using Api.Core.Application.repository;
 
-namespace Api.core.Application.service
+namespace Api.Core.Application.service
 {
     public interface IServiceCLient
     {
@@ -29,44 +29,43 @@ namespace Api.core.Application.service
     
         
         ListaClient valores= await repo.GetAllClient();
-        if(valores.lista_client.Count==0)
+        Console.WriteLine(valores.Clients.Count);
+        switch (valores.Clients.Count)
         {
-            throw new ReturnDataIsEmpty();
+            case 0:
+            {
+                throw new ReturnDataIsEmpty();
+            }
+            case >= 1:
+            {
+                return valores;
+            }
+            default:
+            {
+                throw new ReturnDataIsEmpty();
+            }
         }
-        
-        return  valores;
+   
     }
     public async Task<bool> AddService(ClientDto campos)//
     {
        
         Validation verificador = new();
+
         
-        
-        try
+       
+        campos.Cpf = verificador.IsValidDigit(campos.Cpf);
+        await IsValidAccount(campos.Conta);
+        if (await repo.IsExistsCpf(campos.Cpf))
         {
-            verificador.VerificarNome(campos.Nome);
-            campos.Cpf = verificador.IsValidDigit(campos.Cpf);
-            await IsValidAccount(campos.Conta);
-            if (await repo.IsExistsCpf(campos.Cpf))
-            {
-                throw new InvalidCpfException(campos.Cpf);
-            }
+            throw new InvalidCpfException(campos.Cpf);
         }
-        catch (InvalidNameException )
+        if (!verificador.VerificarNome(campos.Nome))
         {
-            return false;
+            throw new InvalidNameException();
         }
-        catch (InvalidCpfException)
-        {
-            //e bom criar um exception com https pra ele retornar direto os erros certos
-            return false;
-        }
-        catch (InvalidAccount)
-        {
-            return false;
-        }
-        int resultado= await repo.AddClient(campos);
-        if (resultado ==0)
+        int resultant= await repo.AddClient(campos);
+        if (resultant ==0)
         {
              throw new ErroAddToDatabaseException("AddService");
         }
@@ -78,21 +77,25 @@ namespace Api.core.Application.service
     {
       
         Validation verificar = new();
-        //
         var valores =await  repo.GetById(id);
         if (string.IsNullOrWhiteSpace(valores.Nome))
         {
             throw new InvalidIdException(id);
         }
-       
-        verificar.IsValidDigit(campos.Cpf);
 
-        if (await repo.IsExistsCpf(campos.Cpf))
+        try
         {
+            campos.Nome= verificar.IsValidDigit(campos.Cpf);
+            if (await repo.IsExistsCpf(campos.Cpf))
+            {
                 campos.Cpf = valores.Cpf;
+            }
         }
-            
-        
+        catch (InvalidCpfException)
+        {
+            campos.Cpf = valores.Cpf;
+        }
+      
         
         if(!verificar.VerificarNome(campos.Nome)){
   
@@ -103,15 +106,27 @@ namespace Api.core.Application.service
         {
             campos.Conta =valores.Conta;
         }
-           
-           
+
+        switch (await repo.UpdateClient(campos, id))
+        {
+            case 0:
+            {
+                throw new ErroUpdateToDatabaseException();
+            }
+            case >= 1:
+            {
+                return true;
+            }
+            default:
+            {
+                throw new ErroUpdateToDatabaseException();
+            }
+        }
+      
         
        
-        if (await repo.UpdateClient(campos, id)==0)
-        {
-          throw new ErroAddToDatabaseException();
-        }
-        return true;
+        
+        
     }
 
     public async Task<bool> DeleteService(int id)//
@@ -127,11 +142,11 @@ namespace Api.core.Application.service
     {
         if (int.IsNegative(account))
         {
-            return false;
+            throw new InvalidAccount();
         }
         if(await repo.ContaExiste(account))
         {
-            return false;
+            throw new InvalidAccount();
         }
         return true;
     }

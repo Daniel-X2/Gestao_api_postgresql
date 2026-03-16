@@ -1,0 +1,63 @@
+using Api.Core.Application.service;
+using Dto;
+
+
+
+namespace Api.Routers;
+
+public class  ClientRouter
+{
+    
+    
+    public  async  Task Routers(WebApplication app)
+    {
+  
+        app.MapGet("/client/get/", async Task<ListaClient> (IServiceCLient service) =>
+        {
+           
+            ListaClient lista=  await service.GetAllService();
+            
+            return lista ;
+        });
+        app.MapDelete("client/delete/{id}", async  Task<IResult> (int id,IServiceCLient service) =>
+        {
+          bool resultado= await service.DeleteService(id);
+          //await _next(context);
+          if (resultado)
+          {
+              
+            
+              return Results.Ok(new {resultado="foi deletado com sucesso"});
+          }
+          return Results.BadRequest(new {erro="erro ao tentar deletar"});
+          
+          
+        });
+        app.MapPost("client/add/", async Task<IResult> (ClientDto campos,IServiceCLient service) =>
+        {
+        bool resultado=  await  service.AddService(campos);
+     
+        
+        if (resultado)
+        {
+            return Results.Ok(new {resultado="foi adicionado com sucesso"});
+        }
+        return Results.BadRequest(new {erro="erro ao tentar adicionar"});
+      
+        });
+        app.MapPut("client/update/{id}/", async Task<IResult> (int id, ClientDto campos, IServiceCLient service) =>
+        {
+          bool resultado= await service.UpdateService(id,campos);
+          //_next(context);
+          if (resultado)
+          {
+              return Results.Ok(new {resultado="atualizado com sucesso"});
+          }
+          return Results.BadRequest(new {erro="erro ao tentar atualizar"});
+            
+        });
+        
+        
+
+    }
+}

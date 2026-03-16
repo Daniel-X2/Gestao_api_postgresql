@@ -1,14 +1,14 @@
-using Api.core.Application.service;
+using Api.Core.Application.service;
 
 using Dto;
 
 
-namespace api.Routers;
+namespace Api.Routers;
 
-public class RoutersFuncionario
+public class FuncionarioRouters
 {
         
-        public static async  Task Router(WebApplication app)
+        public  async  Task Router(WebApplication app)
         {
             
             app.MapGet("/funcionario/get",async Task<ListaFuncionario> (IServiceFuncionario n1) =>

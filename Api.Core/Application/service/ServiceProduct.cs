@@ -1,29 +1,40 @@
-using Api.core.Application.repository;
+using Api.Core.Application.repository;
 using Dto;
 using Utils;
 
-public interface IServiceProduct
+namespace Api.Core.Application.service
 {
-  public  Task<ListaProduto> GetAllProduct();
+    public interface IServiceProduct
+{
+  public  Task<ListaProduct> GetAllProduct();
   public Task<bool> AddProduct(ProdutoDto campos);
   public Task<bool> DeleteProduct(int id);
-  public Task<ListaProduto>  GetEstoque();
+  public Task<ListaProduct>  GetEstoque();
   public Task<List<float>> GetValorBruto();
   public Task<ProdutoDto> GetProdutId(int id);
-  public Task UpdateProduct(ProdutoDto campos, int id);
+  public Task<bool> UpdateProduct(ProdutoDto campos, int id);
 }
 class ServiceProduct(IRepositoryProduct repo):IServiceProduct
 {
-    public async Task<ListaProduto> GetAllProduct()
+    public async Task<ListaProduct> GetAllProduct()
     {
        
-       ListaProduto  lista =await repo.GetAllProduct();
-       if (lista.lista_prod.Count==0)
+       ListaProduct  lista =await repo.GetAllProduct();
+       switch (lista.Product.Count)
        {
-           throw new ReturnDataIsEmpty();
+           case 0:
+           {
+               throw new ReturnDataIsEmpty();
+           }
+           case >= 1:
+           {
+               return lista;
+           }
+           default:
+           {
+               throw new ReturnDataIsEmpty();
+           }
        }
-
-       return lista;
     }
 
     public async Task<bool> AddProduct(ProdutoDto campos)
@@ -40,12 +51,12 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
             }
             if (campos.Quantidade<=0)
             {
-                throw new InvalidQuantityException();
+                throw new NegativeNumericException();
             }
 
             if (campos.ValorRevenda<=0)
             {
-                throw new ArgumentException("aqui ta ruim");
+                throw new NegativeNumericException();
             }
 
             if (await repo.IsExistLote(campos.Lote) || campos.Lote<=0)
@@ -53,8 +64,6 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
                 throw new InvalidLoteException(campos.Lote);
             }
 
-         
-            
 
             int resultado = await repo.AddProduct(campos);
             switch (resultado)
@@ -86,10 +95,10 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
         return true;
     }
 
-    public async Task<ListaProduto> GetEstoque()
+    public async Task<ListaProduct> GetEstoque()
     {
-        ListaProduto lista =await repo.GetEstoque();
-        if (lista.lista_prod.Count <= 0)
+        ListaProduct lista =await repo.GetEstoque();
+        if (lista.Product.Count <= 0)
         {
             throw new ReturnDataIsEmpty();
         }
@@ -119,7 +128,7 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
         return product;
     }
 
-    public async Task UpdateProduct(ProdutoDto campos,int id)
+    public async Task<bool> UpdateProduct(ProdutoDto campos,int id)
     {
         Validation validation = new();
         var valores =await repo.GetProductById(id);
@@ -159,16 +168,18 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
        {
            case 0:
            {
-               break;
+               throw new ErroUpdateToDatabaseException();
+               
            }
            case 1:
            {
-               break;
+               return true;
            }
            default:
            {
-               break;
+               throw new ErroUpdateToDatabaseException();
            }
        }
     }
+}
 }

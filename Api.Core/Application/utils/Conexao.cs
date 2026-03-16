@@ -1,7 +1,7 @@
 using Npgsql;
 using DotNetEnv;
 
-namespace Api.core.Application.utils
+namespace Api.Core.Application.utils
 {
 internal interface IConnect
   {

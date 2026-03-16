@@ -1,8 +1,8 @@
 using Npgsql;
 using Dto;
-using Api.core.Application.utils;
+using Api.Core.Application.utils;
 
-namespace Api.core.Application.repository
+namespace Api.Core.Application.repository
 {
 public interface  IRepositoryClient
 {
@@ -33,12 +33,13 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         await using var reader = await cmd.ExecuteReaderAsync();
         while(await reader.ReadAsync())
         {
+            
             ClientDto campos=new();
             campos.Nome=(string)reader["nome"];
             campos.Cpf=(string)reader["cpf"];
             campos.Conta=(int)reader["conta"];
             campos.Isvip=(bool)reader["isvip"];
-            lista.lista_client.Add(campos);
+            lista.Clients.Add(campos);
         }
          
         return lista;
@@ -65,7 +66,6 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
          
         return campos;
     }
-
     public async Task<int> AddClient(ClientDto campos)
     {
         int resultado;

@@ -1,7 +1,7 @@
 using Dto;
 using Utils;
-using Api.core.Application.repository;
-namespace Api.core.Application.service
+using Api.Core.Application.repository;
+namespace Api.Core.Application.service
 {
    public interface IServiceFuncionario
    {
@@ -14,12 +14,12 @@ namespace Api.core.Application.service
    }
     public class  ServiceFuncionario(IRepositoryFuncionario repo):IServiceFuncionario
     {
-        //colocar no Iservice
+       
        public async Task<ListaFuncionario> GetAll()
        {
            ListaFuncionario lista=new();
            lista =await repo.GetFuncionario();
-           if (lista.lista_funci.Count==0)
+           if (lista.Funcionarios.Count==0)
            {
                throw new ReturnDataIsEmpty();
            }
@@ -29,34 +29,17 @@ namespace Api.core.Application.service
 
         public async Task<bool> AddService(FuncionarioDto campos)
        {
-
-
-          
            Validation verificador = new();
-           //campos.Cpf = cpf;
            
-           try
+           verificador.IsValidNascimento(campos.Nascimento);//aqui retorna bool
+           campos.Cpf = verificador.IsValidDigit(campos.Cpf);
+           if (verificador.VerificarNome(campos.Nome))
            {
-               verificador.VerificarNome(campos.Nome);
-               verificador.IsValidNascimento(campos.Nascimento);
-               campos.Cpf = verificador.IsValidDigit(campos.Cpf);
-               if (await repo.IsExistsCpf(campos.Cpf))
-               {
-                   throw new InvalidCpfException(campos.Cpf);
-               }
+               throw new InvalidNameException(campos.Nome);
            }
-           catch (InvalidNameException)
+           if (await repo.IsExistsCpf(campos.Cpf))
            {
-               return false;
-           }
-           catch (InvalidCpfException)
-           {
-               //e bom criar um exception com https pra ele retornar direto os erros certos
-               return false;
-           }
-           catch (InvalidNascimentoException)
-           {
-               return false;
+               throw new InvalidCpfException(campos.Cpf);
            }
 
            int resultado = await repo.AddFuncionario(campos);
@@ -80,7 +63,6 @@ namespace Api.core.Application.service
         public async Task<bool> UpdateFuncionarioService(FuncionarioDto campos,int id)
         {
             
-            //FuncionarioDto campos = new();
             Validation verificar = new();
             // devo fazer um return dos campos que nao foram atualizados
             var valores =await  repo.GetById(id);
@@ -91,7 +73,7 @@ namespace Api.core.Application.service
 
             try
             {
-                verificar.IsValidDigit(campos.Cpf);
+                campos.Cpf= verificar.IsValidDigit(campos.Cpf);
                 if ( await repo.IsExistsCpf(campos.Cpf))
                 {
                     campos.Cpf = valores.Cpf;
@@ -108,27 +90,44 @@ namespace Api.core.Application.service
                  campos.Nome = valores.Nome;
             }
 
-            if (!verificar.IsValidNascimento(campos.Nascimento))
+            try
+            {
+                if (!verificar.IsValidNascimento(campos.Nascimento))
+                {
+                    campos.Nascimento = valores.Nascimento;
+                }
+            }
+            catch (InvalidNascimentoException)
             {
                 campos.Nascimento = valores.Nascimento;
-            }
-            
+            } 
             campos.Isadmin = valores.Isadmin;
        
             if (await repo.UpdateFuncionario(campos, id)==0)
             {
-                throw new ErroAddToDatabaseException();
+                throw new ErroUpdateToDatabaseException();
             }
             return true;
         }
     
         public async Task<bool> DeleteFuncionarioService(int id)
         {
-            if (await repo.DeleteFuncionario(id) == 0)
+            switch (await repo.DeleteFuncionario(id))
             {
-                throw new InvalidIdException(id);
+                case 0:
+                {
+                    throw new InvalidIdException(id);
+                }
+                case >= 1:
+                {
+                    return true;
+                }
+                default:
+                {
+                    throw new InvalidIdException(id);
+                }
             }
-            return true;
+            
         }
         public async Task<FuncionarioDto> GetByIdService(int id)
         {
@@ -138,7 +137,7 @@ namespace Api.core.Application.service
             {
                 throw new ReturnDataIsEmpty();
             }
-
+        
             return resultado;
             
             

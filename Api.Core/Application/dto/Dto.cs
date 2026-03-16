@@ -1,22 +1,20 @@
 
-
-
 namespace Dto
 {
     public class ListaClient
     {
-        public List<ClientDto> lista_client {get;set;}= new List<ClientDto>();
+        public List<ClientDto> Clients {get;set;}= new List<ClientDto>();
     }
-
+    
     
     
 public class ListaFuncionario
 {
-    public List<FuncionarioDto> lista_funci {get;set;}= new ();
+    public List<FuncionarioDto> Funcionarios {get;set;}= new ();
 }
-public class ListaProduto
+public class ListaProduct
 {
-     public List<ProdutoDto> lista_prod {get;set;}=new List<ProdutoDto>();
+     public List<ProdutoDto> Product {get;set;}=new List<ProdutoDto>();
 }
 public class ClientDto
 {
@@ -26,6 +24,8 @@ public class ClientDto
     public bool Isvip{get;set;}
     
 }
+
+
 public class FuncionarioDto
 {
     

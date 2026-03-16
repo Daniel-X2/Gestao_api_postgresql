@@ -1,6 +1,12 @@
 
-
-
+public class NegativeNumericException : Exception
+{
+    public NegativeNumericException() : base("o Numero escolhido e negativo"){}
+}
+public class ErroUpdateToDatabaseException : Exception
+{
+    public ErroUpdateToDatabaseException():base("Aconteceu um erro ao atualizar"){}
+}
 public class InvalidCpfException : Exception
 {
     public InvalidCpfException() {}

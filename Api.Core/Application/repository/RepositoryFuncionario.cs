@@ -1,9 +1,9 @@
 
 using Npgsql;
 using Dto;
-using Api.core.Application.utils;
+using Api.Core.Application.utils;
 
-namespace Api.core.Application.repository
+namespace Api.Core.Application.repository
 { 
 public interface IRepositoryFuncionario
     { 
@@ -61,7 +61,7 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
             campos.Isadmin=(bool)reader["isadmin"];
             campos.QuantidadeAtestado=(int)reader["quantidade_atestado"];
             campos.Nascimento=(int)reader["nascimento"];
-            lista.lista_funci.Add(campos);
+            lista.Funcionarios.Add(campos);
         }
          
         return lista;

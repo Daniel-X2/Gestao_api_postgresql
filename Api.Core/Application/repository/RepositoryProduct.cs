@@ -1,14 +1,14 @@
 
 using Npgsql;
 using Dto;
-using Api.core.Application.utils;
+using Api.Core.Application.utils;
 
-namespace Api.core.Application.repository
+namespace Api.Core.Application.repository
 {
     public interface IRepositoryProduct
 {
-    internal Task<ListaProduto> GetAllProduct();
-    internal Task<ListaProduto> GetEstoque();
+    internal Task<ListaProduct> GetAllProduct();
+    internal Task<ListaProduct> GetEstoque();
     internal  Task<List<float>> GetValorBruto();
     internal  Task<int> AddProduct(ProdutoDto campos);
     internal Task<int> UpdateProduct(ProdutoDto campos, int id);
@@ -62,14 +62,14 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
        bool resultado=(bool) await cmd.ExecuteScalarAsync();
        return resultado;
     }
-   public  async Task<ListaProduto> GetAllProduct()
+   public  async Task<ListaProduct> GetAllProduct()
     {
         
        await using NpgsqlConnection connect=host.Connect();;
        await connect.OpenAsync();
        await using var cmd = new NpgsqlCommand("SELECT * FROM produto",connect);
        await using var read= await  cmd.ExecuteReaderAsync();
-       ListaProduto lista=new();
+       ListaProduct lista=new();
         
         while (await read.ReadAsync())
         {
@@ -79,11 +79,11 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
             campos.Quantidade=(int)read["quantidade"];
             campos.ValorRevenda=(float)read["valor_revenda"];
             campos.Lote=(int)read["lote"];
-            lista.lista_prod.Add(campos);
+            lista.Product.Add(campos);
         }
         return lista;
      }
-    public  async Task<ListaProduto> GetEstoque()
+    public  async Task<ListaProduct> GetEstoque()
     {
        
        await using NpgsqlConnection connect=host.Connect();
@@ -91,14 +91,14 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
 
        await using var cmd=new NpgsqlCommand("SELECT nome,quantidade FROM produto",connect);
        var read=await cmd.ExecuteReaderAsync();
-        ListaProduto lista=new();
+        ListaProduct lista=new();
         while(await read.ReadAsync())
         {
             ProdutoDto campos=new();
             campos.Nome=(string)read["nome"];
             campos.Quantidade=(int)read["quantidade"];
 
-            lista.lista_prod.Add(campos);
+            lista.Product.Add(campos);
         }
         return lista;
     }
