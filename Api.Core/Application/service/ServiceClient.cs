@@ -1,4 +1,5 @@
 
+using System.Runtime.CompilerServices;
 using Utils;
 using Dto;
 using Api.Core.Application.repository;
@@ -17,12 +18,23 @@ namespace Api.Core.Application.service
 {
     public async Task<ClientDto> GetByIdService(int id)
     {
-        ClientDto resultado= await repo.GetById(id);
-        if (string.IsNullOrWhiteSpace(resultado.Nome))
+        try
+
         {
-            throw new ReturnDataIsEmpty();
+            ClientDto resultado = await repo.GetById(id);
+            if (string.IsNullOrWhiteSpace(resultado.Nome))
+            {
+                throw new ReturnDataIsEmpty();
+            }
+
+            return resultado;
         }
-        return resultado;
+        catch (InvalidOperationException)
+        {
+            throw new InvalidIdException(id);
+        }
+     
+        
     }
     public async Task<ListaClient> GetAllService()//
     {
@@ -85,7 +97,7 @@ namespace Api.Core.Application.service
 
         try
         {
-            campos.Nome= verificar.IsValidDigit(campos.Cpf);
+            campos.Cpf= verificar.IsValidDigit(campos.Cpf);
             if (await repo.IsExistsCpf(campos.Cpf))
             {
                 campos.Cpf = valores.Cpf;
@@ -140,7 +152,7 @@ namespace Api.Core.Application.service
 
     public async Task<bool> IsValidAccount(int account)
     {
-        if (int.IsNegative(account))
+        if (int.IsNegative(account) || account==0)
         {
             throw new InvalidAccount();
         }

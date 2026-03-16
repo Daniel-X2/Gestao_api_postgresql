@@ -15,7 +15,7 @@ namespace Utils
             throw new InvalidCpfException(cpf);
         }
 
-        StringBuilder _cpf = new StringBuilder(string.Empty,11);
+        StringBuilder _cpf = new StringBuilder(string.Empty,12);
         
             
         for (int c=0;c<cpf.Length;c++ )
@@ -26,6 +26,7 @@ namespace Utils
             }
         }
         cpf = _cpf.ToString();
+        _cpf.Clear();
         
         if (cpf.Length != 11)
         {
@@ -38,11 +39,15 @@ namespace Utils
         int resultado1 = 0+CpfEtapa1(cpf);
             
         int resultado2 = CpfEtapa2(cpf, resultado1);
-        if (resultado1 != digito1 && resultado2 != digito2)
+        if (resultado1 != digito1 || resultado2 != digito2)
         {
             throw new InvalidCpfException(cpf);
         }
-        return cpf;
+
+        _cpf.Append(cpf);
+        _cpf.Append(digito1.ToString()+digito2.ToString());
+        
+        return _cpf.ToString();
         
         
     }
@@ -118,7 +123,7 @@ namespace Utils
         int idadeMaxima = 85;
         int idadeMinima = 18;
         
-        if (ano > anoAtual || int.IsNegative(anoAtual))
+        if (ano > anoAtual || int.IsNegative(ano))
         {
             throw new InvalidNascimentoException(ano);
         }

@@ -33,7 +33,7 @@ namespace Api.Core.Application.service
            
            verificador.IsValidNascimento(campos.Nascimento);//aqui retorna bool
            campos.Cpf = verificador.IsValidDigit(campos.Cpf);
-           if (verificador.VerificarNome(campos.Nome))
+           if (!verificador.VerificarNome(campos.Nome))
            {
                throw new InvalidNameException(campos.Nome);
            }
