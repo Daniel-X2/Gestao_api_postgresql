@@ -1,3 +1,4 @@
+using System.Text;
 using Utils;
 using Dto;
 using Api.Core.Application.repository;
@@ -8,7 +9,7 @@ namespace Api.Core.Application.service
     {
         Task<ListaClient> GetAllService();
 
-        Task<bool> UpdateService(int id, ClientDto campos);
+        Task<StringBuilder> UpdateService(int id, ClientDto campos);
         Task<bool> AddService(ClientDto campos);
         Task<bool> DeleteService(int id);
     }
@@ -82,10 +83,10 @@ namespace Api.Core.Application.service
         return true;
     }
 
-    public async Task<bool> UpdateService(int id,
+    public async Task<StringBuilder> UpdateService(int id,
         ClientDto campos)
     {
-      
+        StringBuilder camposNotUpdate=new ();
         Validation verificar = new();
         var valores =await  repo.GetById(id);
         if (string.IsNullOrWhiteSpace(valores.Nome))
@@ -99,23 +100,33 @@ namespace Api.Core.Application.service
             if (await repo.IsExistsCpf(campos.Cpf))
             {
                 campos.Cpf = valores.Cpf;
+                camposNotUpdate.Append(" CPF") ;
             }
         }
         catch (InvalidCpfException)
         {
             campos.Cpf = valores.Cpf;
+            camposNotUpdate.Append(" CPF");
         }
       
         
-        if(!verificar.VerificarNome(campos.Nome)){
+        if(!verificar.VerificarNome(campos.Nome) || campos.Nome==valores.Nome){
   
             campos.Nome = valores.Nome;
+            camposNotUpdate.Append(" NOME");
         }
+        
+        try
+        {
+            await IsValidAccount(campos.Conta);
 
-        if (!await IsValidAccount(campos.Conta))
+        }
+        catch (InvalidAccount)
         {
             campos.Conta =valores.Conta;
+            camposNotUpdate.Append(" CONTA");
         }
+        
 
         switch (await repo.UpdateClient(campos, id))
         {
@@ -125,7 +136,7 @@ namespace Api.Core.Application.service
             }
             case >= 1:
             {
-                return true;
+                return camposNotUpdate;
             }
             default:
             {

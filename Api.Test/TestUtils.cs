@@ -1,5 +1,5 @@
 ﻿using Xunit;
-using Api.Core.Application.utils;
+
 using Utils;
 
 public class TestUtils
@@ -46,7 +46,7 @@ public class TestUtils
     [Theory]
     [InlineData(2200)]
     [InlineData(1500)]
-    public  void TestInvalidNascimento(int nascimento)
+    public  void TestNascimentoInvalido(int nascimento)
     {
         try
         {
@@ -55,10 +55,24 @@ public class TestUtils
         }
         catch ( InvalidNascimentoException)
         {
-            Assert.False(false,"o teste foi um sucesso");
+            Assert.True(true,"o teste foi um sucesso");
         }
     }
-    
+    [Theory]
+    [InlineData(2005)]
+    [InlineData(1980)]
+    public void TestNascimentoValido(int nascimento)
+    {
+        try
+        {
+            bool resultado= validation.IsValidNascimento(nascimento);
+            Assert.True(resultado,"o teste passou");
+        }
+        catch (InvalidNascimentoException)
+        {
+            Assert.Fail("o teste falhou");
+        }
+    }
     
     
 }

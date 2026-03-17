@@ -47,14 +47,15 @@ public class  ClientRouter
         });
         app.MapPut("client/update/{id}/", async Task<IResult> (int id, ClientDto campos, IServiceCLient service) =>
         {
-          bool resultado= await service.UpdateService(id,campos);
+          var resultado= await service.UpdateService(id,campos);
           //_next(context);
-          if (resultado)
+
+          if (resultado.Length==0 )
           {
-              return Results.Ok(new {resultado="atualizado com sucesso"});
+              return Results.Ok(new {resultado=$"atualizado com sucesso {resultado.Length}"});
           }
-          return Results.BadRequest(new {erro="erro ao tentar atualizar"});
-            
+          return Results.Ok(new {resultado="teve atualizaçoes parciais",camposNotUpdate=$"campos nao atualizados {resultado}"});
+          
         });
         
         
