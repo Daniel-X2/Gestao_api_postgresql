@@ -41,7 +41,7 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
     {
         
             var validation = new Validation();
-            if (!validation.VerificarNome(campos.Nome))
+            if (!validation.ValidateName(campos.Nome))
             {
                 throw new InvalidNameException();
             }
@@ -119,13 +119,19 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
     }
 
     public async Task<ProdutoDto> GetProdutId(int id)
-    { 
-        ProdutoDto product= await  repo.GetProductById(id);
-        if (string.IsNullOrEmpty(product.Nome))
+    {
+        try
         {
-            throw new ReturnDataIsEmpty();
+            ProdutoDto product= await  repo.GetProductById(id);
+            
+            return product;
         }
-        return product;
+        catch ( InvalidOperationException)
+        {
+            
+            throw new InvalidIdException(id);
+        }
+        
     }
 
     public async Task<bool> UpdateProduct(ProdutoDto campos,int id)
@@ -148,7 +154,7 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
             campos.Lote = valores.Lote;
         }
         
-        if (!validation.VerificarNome(campos.Nome))
+        if (!validation.ValidateName(campos.Nome))
         {
             campos.Nome = valores.Nome;
         }

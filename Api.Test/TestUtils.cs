@@ -50,7 +50,7 @@ public class TestUtils
     {
         try
         {
-            bool resultado= validation.IsValidNascimento(nascimento);
+            bool resultado= validation.ValidateBirthYear(nascimento);
             Assert.True(resultado,"o teste falhou");
         }
         catch ( InvalidNascimentoException)
@@ -65,7 +65,7 @@ public class TestUtils
     {
         try
         {
-            bool resultado= validation.IsValidNascimento(nascimento);
+            bool resultado= validation.ValidateBirthYear(nascimento);
             Assert.True(resultado,"o teste passou");
         }
         catch (InvalidNascimentoException)

@@ -9,8 +9,8 @@ public interface  IRepositoryClient
    internal Task<ListaClient>  GetAllClient();
    internal Task<ClientDto> GetById(int id);
    internal Task<int> AddClient(ClientDto campos);
-   internal Task<bool> ContaExiste(int conta);
-   internal Task<bool> IsExistsCpf(string cpf);
+   internal Task<bool> ExistsAccount(int conta);
+   internal Task<bool> ExistsCpf(string cpf);
    internal Task<int> UpdateClient(ClientDto campos, int id);
    internal Task<int> DeleteClient(int id);
    internal Task<int> GetIdByCpf(string cpf);
@@ -85,7 +85,7 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         
         return resultado;
     }  
-    public async Task<bool> ContaExiste(int conta)
+    public async Task<bool> ExistsAccount(int conta)
     {
         await using NpgsqlConnection connect=host.Connect();
         await connect.OpenAsync();
@@ -96,7 +96,7 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
        return resultado;
        
     }
-    public async Task<bool> IsExistsCpf(string cpf)
+    public async Task<bool> ExistsCpf(string cpf)
     {
         await using NpgsqlConnection connect =host.Connect();
         await connect.OpenAsync();
@@ -113,7 +113,7 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
 
         await connect.OpenAsync();
         int resultado;
-        string sql = "UPDATE  cliente set nome=@nome,cpf=@cpf,conta=@conta,isvip=@isvip  WHERE id = @id";
+        
         
        await using var cmd = new NpgsqlCommand("UPDATE  cliente set nome=@nome,cpf=@cpf,conta=@conta,isvip=@isvip  WHERE id = @id", connect);
       

@@ -14,6 +14,7 @@ namespace Api
             WebApplicationBuilder builder = WebApplication.CreateBuilder();
             AddScope scope = new();
             
+           
             scope.AddScopeFuncion(builder);
             var app = builder.Build();
             app.UseMiddleware<ExceptionHandlingMiddleware>();

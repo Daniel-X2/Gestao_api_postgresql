@@ -7,7 +7,7 @@ namespace Api.Core.Application.repository
 { 
 public interface IRepositoryFuncionario
     { 
-   internal Task<bool> IsExistsCpf(string cpf);
+   internal Task<bool> ExistsCpf(string cpf);
    internal Task<ListaFuncionario> GetFuncionario();
    internal Task<int> AddFuncionario(FuncionarioDto campos);//
    internal Task<int> UpdateFuncionario(FuncionarioDto campos,int id);
@@ -31,7 +31,7 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         return (int)reader["id"];
     }
 
-    public async Task<bool> IsExistsCpf(string cpf)
+    public async Task<bool> ExistsCpf(string cpf)
     {
         await using NpgsqlConnection connect =host.Connect();
         await connect.OpenAsync();

@@ -108,8 +108,8 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
       await using  NpgsqlConnection connect=host.Connect();
       await connect.OpenAsync();
 
-        var cmd= new NpgsqlCommand("SELECT valor_revenda FROM produto",connect);
-        var read= await cmd.ExecuteReaderAsync();
+      await  using var cmd= new NpgsqlCommand("SELECT valor_revenda FROM produto",connect);
+      var read= await cmd.ExecuteReaderAsync();
         List<float> lista=new();
         while(await read.ReadAsync())
         {

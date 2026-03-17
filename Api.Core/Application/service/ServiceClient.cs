@@ -63,15 +63,13 @@ namespace Api.Core.Application.service
        
         Validation verificador = new();
 
-        
-       
         campos.Cpf = verificador.IsValidDigit(campos.Cpf);
         await IsValidAccount(campos.Conta);
-        if (await repo.IsExistsCpf(campos.Cpf))
+        if (await repo.ExistsCpf(campos.Cpf))
         {
             throw new InvalidCpfException(campos.Cpf);
         }
-        if (!verificador.VerificarNome(campos.Nome))
+        if (!verificador.ValidateName(campos.Nome))
         {
             throw new InvalidNameException();
         }
@@ -97,7 +95,7 @@ namespace Api.Core.Application.service
         try
         {
             campos.Cpf= verificar.IsValidDigit(campos.Cpf);
-            if (await repo.IsExistsCpf(campos.Cpf))
+            if (await repo.ExistsCpf(campos.Cpf))
             {
                 campos.Cpf = valores.Cpf;
                 camposNotUpdate.Append(" CPF") ;
@@ -110,7 +108,7 @@ namespace Api.Core.Application.service
         }
       
         
-        if(!verificar.VerificarNome(campos.Nome) || campos.Nome==valores.Nome){
+        if(!verificar.ValidateName(campos.Nome) || campos.Nome==valores.Nome){
   
             campos.Nome = valores.Nome;
             camposNotUpdate.Append(" NOME");
@@ -138,16 +136,14 @@ namespace Api.Core.Application.service
             {
                 return camposNotUpdate;
             }
-            default:
-            {
-                throw new ErroUpdateToDatabaseException();
-            }
         }
-      
-        
-       
-        
-        
+
+        return camposNotUpdate;
+
+
+
+
+
     }
 
     public async Task<bool> DeleteService(int id)//
@@ -165,7 +161,7 @@ namespace Api.Core.Application.service
         {
             throw new InvalidAccount();
         }
-        if(await repo.ContaExiste(account))
+        if(await repo.ExistsAccount(account))
         {
             throw new InvalidAccount();
         }
@@ -176,7 +172,7 @@ namespace Api.Core.Application.service
     {
         Validation verificador = new();
         verificador.IsValidDigit(cpf);
-        if (await repo.IsExistsCpf(cpf) )
+        if (await repo.ExistsCpf(cpf) )
         {
             throw new InvalidCpfException(cpf);
         }

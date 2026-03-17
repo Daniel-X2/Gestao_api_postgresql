@@ -31,13 +31,13 @@ namespace Api.Core.Application.service
        {
            Validation verificador = new();
            
-           verificador.IsValidNascimento(campos.Nascimento);//aqui retorna bool
+           verificador.ValidateBirthYear(campos.Nascimento);//aqui retorna bool
            campos.Cpf = verificador.IsValidDigit(campos.Cpf);
-           if (!verificador.VerificarNome(campos.Nome))
+           if (!verificador.ValidateName(campos.Nome))
            {
                throw new InvalidNameException(campos.Nome);
            }
-           if (await repo.IsExistsCpf(campos.Cpf))
+           if (await repo.ExistsCpf(campos.Cpf))
            {
                throw new InvalidCpfException(campos.Cpf);
            }
@@ -64,7 +64,7 @@ namespace Api.Core.Application.service
         {
             
             Validation verificar = new();
-            // devo fazer um return dos campos que nao foram atualizados
+           
             var valores =await  repo.GetById(id);
             if (string.IsNullOrWhiteSpace(valores.Nome))
             {
@@ -74,7 +74,7 @@ namespace Api.Core.Application.service
             try
             {
                 campos.Cpf= verificar.IsValidDigit(campos.Cpf);
-                if ( await repo.IsExistsCpf(campos.Cpf))
+                if ( await repo.ExistsCpf(campos.Cpf))
                 {
                     campos.Cpf = valores.Cpf;
                 }
@@ -85,14 +85,14 @@ namespace Api.Core.Application.service
 
             }
 
-            if (!verificar.VerificarNome(campos.Nome))
+            if (!verificar.ValidateName(campos.Nome))
             {
                  campos.Nome = valores.Nome;
             }
 
             try
             {
-                if (!verificar.IsValidNascimento(campos.Nascimento))
+                if (!verificar.ValidateBirthYear(campos.Nascimento))
                 {
                     campos.Nascimento = valores.Nascimento;
                 }
@@ -131,17 +131,15 @@ namespace Api.Core.Application.service
         }
         public async Task<FuncionarioDto> GetByIdService(int id)
         {
-            
-            FuncionarioDto resultado= await repo.GetById(id);
-            if (string.IsNullOrWhiteSpace(resultado.Nome))
+            try
             {
-                throw new ReturnDataIsEmpty();
+                FuncionarioDto resultado= await repo.GetById(id);
+                return resultado;
             }
-        
-            return resultado;
-            
-            
-            
+            catch (InvalidOperationException)
+            {
+                throw new InvalidIdException(id);
+            }
         }
         
     }

@@ -51,7 +51,7 @@ namespace Utils
         
         
     }
-    public bool VerificarNome(string nome)
+    public bool ValidateName(string nome)
     {
         if (string.IsNullOrWhiteSpace(nome) || nome.Length<4)
         {
@@ -117,7 +117,7 @@ namespace Utils
         return 00;
     }
 
-    public bool IsValidNascimento(int ano)
+    public bool ValidateBirthYear(int ano)
     {
         int anoAtual = DateTime.Now.Year;
         int idadeMaxima = 85;
