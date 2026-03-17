@@ -29,7 +29,7 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
         cmd.Parameters.AddWithValue("id", id);
         
         await using var reader = await cmd.ExecuteReaderAsync();
-        await reader.ReadAsync();
+        if (!await reader.ReadAsync()) { return null;}
         
         ProdutoDto campos=new();
         campos.Nome=(string)reader["nome"];

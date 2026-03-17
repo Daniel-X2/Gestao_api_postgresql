@@ -33,10 +33,10 @@ public class  ReturnDataIsEmpty : Exception
 
     public ReturnDataIsEmpty() { }
 }
-public class InvalidAccount : Exception
+public class InvalidAccountException : Exception
 {
-    public InvalidAccount(){}
-    public InvalidAccount(int account):base($"a conta nao e valida {account}"){}
+    public InvalidAccountException(){}
+    public InvalidAccountException(int account):base($"a conta nao e valida {account}"){}
 }
 
 public class InvalidNascimentoException : Exception

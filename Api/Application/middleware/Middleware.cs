@@ -35,7 +35,7 @@ public class ExceptionHandlingMiddleware
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(new { erro = "aconteceu um erro ao adicionar os  dados",details=e.Message});
         }
-        catch (InvalidAccount)
+        catch (InvalidAccountException)
         {
             context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
             await context.Response.WriteAsJsonAsync(new { erro = "A conta inserida e invalida",details="Verifique se a conta ja existe ou o numero e negativo" });

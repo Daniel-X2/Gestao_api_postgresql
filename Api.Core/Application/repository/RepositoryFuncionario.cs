@@ -27,7 +27,7 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         cmd.Parameters.AddWithValue("cpf", cpf);
 
         await using var reader = await cmd.ExecuteReaderAsync();
-        await reader.ReadAsync();
+        if (!await reader.ReadAsync()) { return 0;}
         return (int)reader["id"];
     }
 
@@ -114,7 +114,7 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         await using NpgsqlConnection connect=host.Connect();
 
         await connect.OpenAsync();
-        //revisar e colocar pra pegar por id
+     
        await using (var  cmd = new NpgsqlCommand("DELETE FROM funcionario WHERE id = @id ", connect))
         {
             cmd.Parameters.AddWithValue("id",id);
@@ -135,7 +135,7 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         cmd.Parameters.AddWithValue("id", id);
         
         await using var reader = await cmd.ExecuteReaderAsync();
-        await reader.ReadAsync();
+        if (!await reader.ReadAsync()) { return null;}
         
         FuncionarioDto campos=new();
         campos.Nome=(string)reader["nome"];

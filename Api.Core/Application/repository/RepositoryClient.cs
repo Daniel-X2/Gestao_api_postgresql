@@ -54,7 +54,7 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         cmd.Parameters.AddWithValue("id", id);
         
         await using var reader = await cmd.ExecuteReaderAsync();
-        await reader.ReadAsync();
+        if (!await reader.ReadAsync()) { return null;}
         
         ClientDto campos=new();
         campos.Nome=(string)reader["nome"];
@@ -157,7 +157,7 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         cmd.Parameters.AddWithValue("cpf", cpf);
         
         await using var reader = await cmd.ExecuteReaderAsync();
-        await reader.ReadAsync();
+        if (!await reader.ReadAsync()) { return 0;}
 
 
 

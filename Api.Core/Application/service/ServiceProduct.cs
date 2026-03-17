@@ -120,18 +120,12 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
 
     public async Task<ProdutoDto> GetProdutId(int id)
     {
-        try
-        {
             ProdutoDto product= await  repo.GetProductById(id);
-            
+            if (product==null)
+            {
+                throw new InvalidIdException(id);
+            }
             return product;
-        }
-        catch ( InvalidOperationException)
-        {
-            
-            throw new InvalidIdException(id);
-        }
-        
     }
 
     public async Task<bool> UpdateProduct(ProdutoDto campos,int id)
@@ -139,7 +133,7 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
         Validation validation = new();
         var valores =await repo.GetProductById(id);
         
-        if (string.IsNullOrWhiteSpace(valores.Nome))
+        if (valores==null)
         {
             throw new ReturnDataIsEmpty();
         }

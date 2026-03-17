@@ -66,7 +66,7 @@ namespace Api.Core.Application.service
             Validation verificar = new();
            
             var valores =await  repo.GetById(id);
-            if (string.IsNullOrWhiteSpace(valores.Nome))
+            if (valores==null)
             {
                 throw new InvalidIdException(id);
             }
@@ -131,15 +131,14 @@ namespace Api.Core.Application.service
         }
         public async Task<FuncionarioDto> GetByIdService(int id)
         {
-            try
-            {
+            
                 FuncionarioDto resultado= await repo.GetById(id);
+                if (resultado==null)
+                {
+                    throw new InvalidIdException(id);
+                }
                 return resultado;
-            }
-            catch (InvalidOperationException)
-            {
-                throw new InvalidIdException(id);
-            }
+            
         }
         
     }

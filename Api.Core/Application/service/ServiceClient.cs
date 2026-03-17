@@ -17,23 +17,14 @@ namespace Api.Core.Application.service
 {
     public async Task<ClientDto> GetByIdService(int id)
     {
-        try
-
-        {
-            ClientDto resultado = await repo.GetById(id);
-            if (string.IsNullOrWhiteSpace(resultado.Nome))
-            {
-                throw new ReturnDataIsEmpty();
-            }
-
-            return resultado;
-        }
-        catch (InvalidOperationException)
-        {
-            throw new InvalidIdException(id);
-        }
-     
         
+            ClientDto resultado = await repo.GetById(id);
+            if (resultado==null)
+            {
+                throw new InvalidIdException(id);
+            }
+            return resultado;
+ 
     }
     public async Task<ListaClient> GetAllService()//
     {
@@ -87,7 +78,8 @@ namespace Api.Core.Application.service
         StringBuilder camposNotUpdate=new ();
         Validation verificar = new();
         var valores =await  repo.GetById(id);
-        if (string.IsNullOrWhiteSpace(valores.Nome))
+        
+        if (valores==null)
         {
             throw new InvalidIdException(id);
         }
@@ -119,7 +111,7 @@ namespace Api.Core.Application.service
             await IsValidAccount(campos.Conta);
 
         }
-        catch (InvalidAccount)
+        catch (InvalidAccountException)
         {
             campos.Conta =valores.Conta;
             camposNotUpdate.Append(" CONTA");
@@ -159,11 +151,11 @@ namespace Api.Core.Application.service
     {
         if (int.IsNegative(account) || account==0)
         {
-            throw new InvalidAccount();
+            throw new InvalidAccountException();
         }
         if(await repo.ExistsAccount(account))
         {
-            throw new InvalidAccount();
+            throw new InvalidAccountException();
         }
         return true;
     }
