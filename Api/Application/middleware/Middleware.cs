@@ -74,7 +74,7 @@ public class ExceptionHandlingMiddleware
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(new { erro = "aconteceu um erro inesperado",details=e.Message});
-            Console.WriteLine(e);
+            
         }
     }
 }

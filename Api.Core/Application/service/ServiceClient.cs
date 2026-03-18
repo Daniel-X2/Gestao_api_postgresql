@@ -31,7 +31,7 @@ namespace Api.Core.Application.service
     
         
         ListaClient valores= await repo.GetAllClient();
-        Console.WriteLine(valores.Clients.Count);
+       
         switch (valores.Clients.Count)
         {
             case 0:
