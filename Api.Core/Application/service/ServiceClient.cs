@@ -13,7 +13,7 @@ namespace Api.Core.Application.service
         Task<bool> AddService(ClientDto campos);
         Task<bool> DeleteService(int id);
     }
-    class ClientService(IRepositoryClient repo):IServiceCLient
+    class ServiceClient(IRepositoryClient repo):IServiceCLient
 {
     public async Task<ClientDto> GetByIdService(int id)
     {

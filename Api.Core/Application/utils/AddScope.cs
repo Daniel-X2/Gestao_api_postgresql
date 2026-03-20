@@ -14,7 +14,7 @@ public class AddScope
         
         
         builder.Services.AddScoped<IRepositoryClient,RepositoryClient>();
-        builder.Services.AddScoped<IServiceCLient, ClientService>();
+        builder.Services.AddScoped<IServiceCLient, ServiceClient>();
         
         builder.Services.AddScoped<IServiceProduct, ServiceProduct>();
         builder.Services.AddScoped<IRepositoryProduct, RepositoryProduct>();

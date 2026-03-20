@@ -32,30 +32,14 @@ public class TestUtils
     [InlineData(1500)]
     public  void TestNascimentoInvalido(int nascimento)
     {
-        try
-        {
-            bool resultado= validation.ValidateBirthYear(nascimento);
-            Assert.True(resultado,"o teste falhou");
-        }
-        catch ( InvalidNascimentoException)
-        {
-            Assert.True(true,"o teste foi um sucesso");
-        }
+        Assert.Throws<InvalidNascimentoException>(() => validation.ValidateBirthYear(nascimento));
+        
     }
-    [Theory]
-    [InlineData(2005)]
-    [InlineData(1980)]
-    public void TestNascimentoValido(int nascimento)
+    [Fact]
+    public void TestNascimentoValido()
     {
-        try
-        {
-            bool resultado= validation.ValidateBirthYear(nascimento);
-            Assert.True(resultado,"o teste passou");
-        }
-        catch (InvalidNascimentoException)
-        {
-            Assert.Fail("o teste falhou");
-        }
+           bool resultado= validation.ValidateBirthYear(ReturnDados.ReturnBirthYear());
+           Assert.True(resultado);
     }
     
     

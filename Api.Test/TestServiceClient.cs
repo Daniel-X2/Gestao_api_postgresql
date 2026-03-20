@@ -15,10 +15,10 @@ public class TestServiceClient
     [Fact]
     public async Task TestAddClientValido()
     {
-        var client =await ReturnDados.ReturnCLient();
+        var client = ReturnDados.ReturnCLient();
      
         moq.Setup(repo=> repo.AddClient(client) ).ReturnsAsync(1);
-        var n1 = new ClientService(moq.Object);
+        var n1 = new ServiceClient(moq.Object);
         
         await n1.AddService(client);
         
@@ -26,10 +26,10 @@ public class TestServiceClient
     [Fact]
     public async Task TestAddClientInvalidoCpf()
     {
-        var client =await ReturnDados.ReturnCLient() ;
+        var client = ReturnDados.ReturnCLient() ;
         client.Cpf = "47854664505";
         moq.Setup(repo=> repo.AddClient(client) ).ReturnsAsync(1);
-        var n1 = new ClientService(moq.Object);
+        var n1 = new ServiceClient(moq.Object);
         
         
         await Assert.ThrowsAsync<InvalidCpfException>(async ( )=> await n1.AddService(client));
@@ -38,11 +38,11 @@ public class TestServiceClient
     [Fact]
     public async Task TestAddClientInvalidoConta()
     {
-        var client =await ReturnDados.ReturnCLient() ;
+        var client = ReturnDados.ReturnCLient() ;
         client.Conta = 0;
         
         moq.Setup(repo=> repo.AddClient(client) ).ReturnsAsync(1);
-        var n1 = new ClientService(moq.Object);
+        var n1 = new ServiceClient(moq.Object);
         
         
         await Assert.ThrowsAsync<InvalidAccountException>(async ( )=> await n1.AddService(client));
@@ -51,10 +51,10 @@ public class TestServiceClient
     [Fact]
     public async Task TestAddClientInvalidoNome()
     {
-        var client =await ReturnDados.ReturnCLient() ;
+        var client =ReturnDados.ReturnCLient() ;
         client.Nome = "dan";
         moq.Setup(repo=> repo.AddClient(client) ).ReturnsAsync(1);
-        var n1 = new ClientService(moq.Object);
+        var n1 = new ServiceClient(moq.Object);
         
         await Assert.ThrowsAsync<InvalidNameException>(async ( )=> await n1.AddService(client));
         
@@ -62,11 +62,11 @@ public class TestServiceClient
     [Fact]
     public async Task TestUpdateClientValido()
     {
-        var client = await ReturnDados.ReturnCLient() ;
+        var client =  ReturnDados.ReturnCLient() ;
         //eu pego outro que ele pega pelo id e faço o retorno ser igual zero
         moq.Setup(repo => repo.GetById(5)).ReturnsAsync(client);
         moq.Setup(repo=> repo.UpdateClient(client,5) ).ReturnsAsync(1);
-        var n1 = new ClientService(moq.Object);
+        var n1 = new ServiceClient(moq.Object);
         
         await n1.UpdateService(5,client);
         Assert.True(true,"o teste passou");
@@ -76,7 +76,7 @@ public class TestServiceClient
     public async Task TestDeleteClientInValido(int id)
     {
         moq.Setup(repo => repo.DeleteClient(id)).ReturnsAsync(0);
-        var n1 = new ClientService(moq.Object);
+        var n1 = new ServiceClient(moq.Object);
         
         await Assert.ThrowsAsync<InvalidIdException>(async () => await n1.DeleteService(id));
 
@@ -87,7 +87,7 @@ public class TestServiceClient
     public async Task TestDeleteClientValido(int id)
     {
         moq.Setup(repo => repo.DeleteClient(id)).ReturnsAsync(1);
-        var n1 = new ClientService(moq.Object);
+        var n1 = new ServiceClient(moq.Object);
         bool resultado =await n1.DeleteService(id);
         Assert.True(resultado);
     }

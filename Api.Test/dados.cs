@@ -1,4 +1,4 @@
-using Xunit;
+
 using Bogus;
 using Bogus.Extensions.Brazil;
 using Dto;
@@ -7,16 +7,16 @@ namespace Api.Test;
 public class ReturnDados
 {
     
-    public static async Task<ClientDto> ReturnCLient()
+    public static  ClientDto ReturnCLient()
     {
         var n1 = new Faker("pt_BR");
-        Dto.ClientDto client = new Dto.ClientDto();
+        ClientDto client = new ClientDto();
         //Console.WriteLine(n1.Person.Cpf());
         client.Cpf= n1.Person.Cpf();
         client.Conta = n1.Random.Int(min:10,max:2000);
         client.Isvip = n1.Random.Bool();
         client.Nome = n1.Person.FullName;
-        Task.Delay(1000);
+        
         return client;
     }
 
@@ -33,9 +33,26 @@ public class ReturnDados
         return product;
     }
 
+    public static FuncionarioDto ReturnFuncionario()
+    {
+        var n1 = new Faker("pt_BR");
+        FuncionarioDto funcionario = new();
+        funcionario.Nome = n1.Name.FullName();
+        funcionario.Cpf = n1.Person.Cpf();
+        funcionario.Isadmin = n1.Random.Bool();
+        funcionario.QuantidadeAtestado = n1.Random.Int(min: 0, max: 50);
+        funcionario.Nascimento = n1.Person.DateOfBirth.Year;
+       
+        return funcionario;
+    }
     public static String ReturnCpf()
     {
         var n1 = new Faker("pt_BR");
         return n1.Person.Cpf();
+    }
+    public static int ReturnBirthYear()
+    {
+        var n1 = new Faker("pt_BR");
+        return n1.Person.DateOfBirth.Year;
     }
 }

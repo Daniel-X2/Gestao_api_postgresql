@@ -74,15 +74,5 @@ public class TestServiceProduct
         Assert.True(await n1.UpdateProduct(product,id));
     }
      
-    [Theory]
-    [InlineData(8,"I5 4460",15795,10,-1,5)]
-    public async Task TestUpdateLote(int id,string nome,int codigo,int quantidade,int lote,float valor_revenda)
-    {
-        var product = ReturnDados.ReturnProduct();
-        moq.Setup(repo => repo.GetProductById(id)).ReturnsAsync(product);
-        moq.Setup(repo => repo.UpdateProduct(product,id)).ReturnsAsync(1);
-        var n1 =new  ServiceProduct(moq.Object);
-        
-        
-    }
+    
 }
