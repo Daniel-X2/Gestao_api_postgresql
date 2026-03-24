@@ -1,4 +1,4 @@
-
+using Api.Core.Application.utils;
 namespace Api
 {
     
@@ -13,12 +13,12 @@ namespace Api
             
             WebApplicationBuilder builder = WebApplication.CreateBuilder();
             AddScope scope = new();
-            
+            Load.LoadEnv();
            
             scope.AddScopeFuncion(builder);
             var app = builder.Build();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
-           // builder.Services.AddScoped<ILoggerFactory>();
+
             await new Routers.Routers().Teste(app);
             app.UseHttpsRedirection();
             

@@ -3,12 +3,10 @@
 
 -- DROP DATABASE IF EXISTS postgres;
 
-DROP TABLE IF EXISTS cliente;
-DROP TABLE IF EXISTS funcionario;
-DROP TABLE IF EXISTS produto;
+
 
 CREATE TABLE cliente (
-    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	nome varchar(30),
 	cpf text,
 	conta int,
@@ -16,21 +14,20 @@ CREATE TABLE cliente (
 	
 );
 CREATE TABLE  funcionario(
-    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	nome varchar(30),
 	cpf text,
 	isadmin bool,
 	quantidade_atestado int,
 	nascimento int
-	--nascimento year
+	
 	
 );
 CREATE TABLE produto(
-    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 	nome varchar(30),
 	codigo int,
 	quantidade int,
 	valor_revenda real,
 	lote int 
-	
 )

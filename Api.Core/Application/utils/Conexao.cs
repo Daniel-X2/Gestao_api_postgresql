@@ -9,10 +9,11 @@ internal interface IConnect
   }
 class  ConnectHost:IConnect
   {
-      
-      private static string EnvDataBase()
+        private string  file = EnvDataBase();
+
+        private static string EnvDataBase()
       {
-          Env.Load();
+          
           string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
           if (string.IsNullOrEmpty(connectionString))
           {
@@ -23,14 +24,23 @@ class  ConnectHost:IConnect
      
       public NpgsqlConnection Connect() 
       {
-          string  file = EnvDataBase();
+          
           return new NpgsqlConnection (file);        
       }
-    
-      
   }
   
+
+public class Load
+{
+    public static void LoadEnv()
+    {
+        Env.Load();
+    }
 }
+
+}
+
+
 
 
 
