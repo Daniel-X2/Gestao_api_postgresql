@@ -1,4 +1,5 @@
 using Api.Core.Application.service;
+using Api.Test;
 using Dto;
 
 
@@ -11,15 +12,23 @@ public class  ClientRouter
     
     public  async  Task Routers(WebApplication app)
     {
-  
-        app.MapGet("/client/get/", async Task<ListaClient> (IServiceCLient service) =>
+        app.MapGet("/ola", async Task(IServiceClient service,IServiceFuncionario servicefun,IServiceProduct servicprdo) =>
+        {
+            while (true)
+            {
+                await  service.AddService(ReturnDados.ReturnCLient());
+                await servicefun.AddService(ReturnDados.ReturnFuncionario());
+                await servicprdo.AddProduct(ReturnDados.ReturnProduct());
+            }
+        });
+        app.MapGet("/client/get/", async Task<ListaClient> (IServiceClient service) =>
         {
            
             ListaClient lista=  await service.GetAllService();
             
             return lista ;
         });
-        app.MapDelete("client/delete/{id}", async  Task<IResult> (int id,IServiceCLient service) =>
+        app.MapDelete("client/delete/{id}", async  Task<IResult> (int id,IServiceClient service) =>
         {
           bool resultado= await service.DeleteService(id);
           //await _next(context);
@@ -33,7 +42,7 @@ public class  ClientRouter
           
           
         });
-        app.MapPost("client/add/", async Task<IResult> (ClientDto campos,IServiceCLient service) =>
+        app.MapPost("client/add/", async Task<IResult> (ClientDto campos,IServiceClient service) =>
         {
         bool resultado=  await  service.AddService(campos);
      
@@ -45,7 +54,7 @@ public class  ClientRouter
         return Results.BadRequest(new {erro="erro ao tentar adicionar"});
       
         });
-        app.MapPut("client/update/{id}/", async Task<IResult> (int id, ClientDto campos, IServiceCLient service) =>
+        app.MapPut("client/update/{id}/", async Task<IResult> (int id, ClientDto campos, IServiceClient service) =>
         {
           var resultado= await service.UpdateService(id,campos);
           //_next(context);

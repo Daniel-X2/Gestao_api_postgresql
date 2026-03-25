@@ -5,7 +5,7 @@ using Api.Core.Application.repository;
 
 namespace Api.Core.Application.service
 {
-    public interface IServiceCLient
+    public interface IServiceClient
     {
         Task<ListaClient> GetAllService();
 
@@ -13,7 +13,7 @@ namespace Api.Core.Application.service
         Task<bool> AddService(ClientDto campos);
         Task<bool> DeleteService(int id);
     }
-    class ServiceClient(IRepositoryClient repo):IServiceCLient
+    class ServiceClient(IRepositoryClient repo):IServiceClient
 {
     public async Task<ClientDto> GetByIdService(int id)
     {

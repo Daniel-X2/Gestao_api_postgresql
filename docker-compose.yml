@@ -3,21 +3,22 @@ services:
       
       container_name: api_db
       image: postgres:18.3-alpine3.23
+      env_file: .env
       volumes:
         -  ./tabelas/sql.sql:/docker-entrypoint-initdb.d/init.sql
       environment:
-        POSTGRES_PASSWORD: 123
+         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       ports:
         - 5433:5432
     api: 
       build: .
       container_name: api
       
-      #image: api
+      image: api
       ports:
         - 8080:8080
-      env_file: Api/.env
-      
-
+      env_file: .env
+    
+    
 
 

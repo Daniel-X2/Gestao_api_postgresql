@@ -9,7 +9,7 @@ namespace Api.Core.Application.repository
 {
     internal Task<ListaProduct> GetAllProduct();
     internal Task<ListaProduct> GetEstoque();
-    internal  Task<List<float>> GetValorBruto();
+    internal  Task<List<decimal>> GetValorBruto();
     internal  Task<int> AddProduct(ProdutoDto campos);
     internal Task<int> UpdateProduct(ProdutoDto campos, int id);
     internal  Task<int> DeleteProduct(int id);
@@ -102,7 +102,7 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
         }
         return lista;
     }
-    public async Task<List<float>> GetValorBruto()
+    public async Task<List<decimal>> GetValorBruto()
     {
        
       await using  NpgsqlConnection connect=host.Connect();
@@ -110,10 +110,10 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
 
       await  using var cmd= new NpgsqlCommand("SELECT valor_revenda FROM produto",connect);
       var read= await cmd.ExecuteReaderAsync();
-        List<float> lista=new();
+        List<decimal> lista=new();
         while(await read.ReadAsync())
         {
-            lista.Add((float)read["valor_revenda"]);
+            lista.Add((decimal)read["valor_revenda"]);
         }
         return lista;
     }

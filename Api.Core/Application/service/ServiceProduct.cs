@@ -10,7 +10,7 @@ namespace Api.Core.Application.service
   public Task<bool> AddProduct(ProdutoDto campos);
   public Task<bool> DeleteProduct(int id);
   public Task<ListaProduct>  GetEstoque();
-  public Task<List<float>> GetValorBruto();
+  public Task<List<decimal>> GetValorBruto();
   public Task<ProdutoDto> GetProdutId(int id);
   public Task<bool> UpdateProduct(ProdutoDto campos, int id);
 }
@@ -106,9 +106,9 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
         return lista;
     }
 
-    public async Task<List<float>> GetValorBruto()
+    public async Task<List<decimal>> GetValorBruto()
     {
-        List<float> lista =await repo.GetValorBruto();
+        List<decimal> lista =await repo.GetValorBruto();
 
         if (lista.Count<=0)
         {

@@ -20,9 +20,9 @@ public class ProductRouters
             return lista;
             
         });
-        app.MapGet("/estoque/valorBruto", async Task<List<float>> (IServiceProduct service) =>
+        app.MapGet("/estoque/valorBruto", async Task<List<decimal>> (IServiceProduct service) =>
         {
-            List<float> lista = await service.GetValorBruto();
+            List<decimal> lista = await service.GetValorBruto();
 
             return lista;
         });
