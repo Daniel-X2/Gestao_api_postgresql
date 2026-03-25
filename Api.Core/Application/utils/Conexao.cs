@@ -1,34 +1,41 @@
 using Npgsql;
 using DotNetEnv;
 
+
+
 namespace Api.Core.Application.utils
 {
+  
 internal interface IConnect
-  {
-     internal NpgsqlConnection Connect();
-  }
-class  ConnectHost:IConnect
-  {
-        private string  file = EnvDataBase();
+{
+    internal NpgsqlConnection Connect();
+}
 
-        private static string EnvDataBase()
+
+     
+     
+  
+
+   class  ConnectHost:IConnect
+  {
+      
+      public static string EnvConnection()
       {
-          
-          string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+          string  connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
           if (string.IsNullOrEmpty(connectionString))
           {
               throw new InvalidConnection();
           }
+
           return connectionString;
       }
-     
-      public NpgsqlConnection Connect() 
+       
+      public NpgsqlConnection Connect()
       {
           
-          return new NpgsqlConnection (file);        
+          return new NpgsqlConnection (EnvConnection());        
       }
   }
-  
 
 public class Load
 {

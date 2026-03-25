@@ -1,10 +1,7 @@
 using Api.Core.Application.utils;
 namespace Api
 {
-    
-
-    
-    class Exec
+    class Program
     {
         
         

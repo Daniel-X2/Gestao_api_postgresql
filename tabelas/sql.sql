@@ -28,6 +28,6 @@ CREATE TABLE produto(
 	nome varchar(30),
 	codigo int,
 	quantidade int,
-	valor_revenda real,
+	valor_revenda numeric,
 	lote int 
 )

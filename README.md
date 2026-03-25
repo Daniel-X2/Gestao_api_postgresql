@@ -1,6 +1,6 @@
 # Sistema de Gestão com .NET
 
-API REST assíncrona desenvolvida em ASP.NET Core para gestão de clientes, funcionários e produtos, utilizando PostgreSQL como banco de dados. O projeto segue uma arquitetura modular com separação  de responsabilidades entre as camadas de roteamento, serviços e repositórios.
+API REST assíncrona desenvolvida em ASP.NET Core para gestão de clientes, funcionários e produtos, utilizando PostgreSQL como banco de dados. O projeto segue uma arquitetura modular com separação de responsabilidades entre as camadas de roteamento, serviços e repositórios.
 
 ## Tecnologias
 
@@ -15,7 +15,7 @@ API REST assíncrona desenvolvida em ASP.NET Core para gestão de clientes, func
 
 ```
 ├── Api/                        # Ponto de entrada, rotas, middleware
-│   ├── Application/	
+│   ├── Application/
 │   │   ├── Routers/            # Definição dos endpoints (Minimal APIs)
 │   │   └── middleware/         # Tratamento centralizado de exceções
 │   └── Program.cs
@@ -28,12 +28,16 @@ API REST assíncrona desenvolvida em ASP.NET Core para gestão de clientes, func
 │       ├── utils/              # Conexão, DI (AddScope), Validation
 │       └── CustomException/    # Exceções personalizadas
 │
-└── Api.Test/                   # Testes unitários
-    ├── dados.cs                # Geração de dados com Bogus
-    ├── TestServiceClient.cs
-    ├── TestServiceFuncionario.cs
-    ├── TestServiceProduct.cs
-    └── TestUtils.cs
+├── Api.Test/                   # Testes unitários
+│   ├── dados.cs                # Geração de dados com Bogus
+│   ├── TestServiceClient.cs
+│   ├── TestServiceFuncionario.cs
+│   ├── TestServiceProduct.cs
+│   └── TestUtils.cs
+│
+├── tabelas/
+│   └── sql.sql                 # Script de inicialização do banco
+└── docker-compose.yml
 ```
 
 ## Funcionalidades
@@ -52,13 +56,13 @@ API REST assíncrona desenvolvida em ASP.NET Core para gestão de clientes, func
 
 ### Produtos (`/product/`)
 - Cadastro com validação de código, lote, quantidade e valor de revenda
-- Consulta de estoque e valor bruto total
+- Consulta de estoque e valor bruto total (retornado como `decimal`)
 - Atualização parcial — campos inválidos mantêm o valor anterior
 - CRUD completo
 
 ## Arquitetura de Tratamento de Erros
 
-Middleware centralizado captura todas as exceções e retorna respostas padronizadas:
+Middleware centralizado captura todas as exceções e retorna respostas padronizadas em JSON:
 
 | Exceção | Status HTTP |
 |---|---|
@@ -77,10 +81,10 @@ Middleware centralizado captura todas as exceções e retorna respostas padroniz
 
 ## Testes
 
-Os testes cobrem a camada de serviço com mocks dos repositórios, sem necessidade de banco de dados.
+Os testes cobrem a camada de serviço com mocks dos repositórios, sem necessidade de banco de dados real.
 
 - **Moq** — mock das interfaces de repositório
-- **Bogus** — geração de dados falsos  para os Testes
+- **Bogus** — geração de dados falsos para os testes
 - **xUnit** — execução dos testes
 
 ```bash
@@ -89,19 +93,26 @@ dotnet test
 
 ## Configuração
 
-### 1. Banco de Dados
+### 1. Variáveis de Ambiente
 
-Execute o script `sql.sql` (em `Api.Core/`) no seu servidor PostgreSQL para criar as tabelas `cliente`, `funcionario` e `produto`.
-
-### 2. Variáveis de Ambiente
-
-Crie um arquivo `.env` na raiz do projeto `Api/`:
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
 ```env
 DB_CONNECTION=Host=localhost;Database=nome;Username=user;Password=senha
+POSTGRES_PASSWORD=senha
 ```
 
-### 3. Execução
+### 2. Banco de Dados
+
+O script `tabelas/sql.sql` cria as tabelas `cliente`, `funcionario` e `produto` automaticamente ao subir via Docker.
+
+### 3. Execução com Docker (recomendado)
+
+```bash
+docker-compose up -d
+```
+
+### 4. Execução manual
 
 ```bash
 dotnet run --project Api
@@ -109,17 +120,29 @@ dotnet run --project Api
 
 ## Endpoints
 
+### Clientes
+
 | Método | Rota | Descrição |
 |---|---|---|
 | GET | `/client/get/` | Lista todos os clientes |
 | POST | `/client/add/` | Adiciona um cliente |
 | PUT | `/client/update/{id}/` | Atualiza um cliente |
 | DELETE | `/client/delete/{id}` | Remove um cliente |
+
+### Funcionários
+
+| Método | Rota | Descrição |
+|---|---|---|
 | GET | `/funcionario/get` | Lista todos os funcionários |
 | GET | `/funcionario/get/{id}` | Busca funcionário por ID |
 | POST | `/funcionario/add/` | Adiciona um funcionário |
 | PUT | `/funcionario/update/{id}/` | Atualiza um funcionário |
 | DELETE | `/funcionario/delete/{id}` | Remove um funcionário |
+
+### Produtos e Estoque
+
+| Método | Rota | Descrição |
+|---|---|---|
 | GET | `/product/get` | Lista todos os produtos |
 | GET | `/product/get/{id}` | Busca produto por ID |
 | GET | `/estoque/get` | Consulta estoque (nome e quantidade) |
@@ -127,3 +150,5 @@ dotnet run --project Api
 | POST | `/product/add` | Adiciona um produto |
 | PUT | `/product/update/{id}/` | Atualiza um produto |
 | DELETE | `/product/delete/{id}` | Remove um produto |
+
+
