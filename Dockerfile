@@ -14,5 +14,9 @@ COPY --from=build /app .
 
 ENTRYPOINT ["dotnet","Api.dll"]
 
-EXPOSE 8080
+EXPOSE 5153
+
+
+
+
 

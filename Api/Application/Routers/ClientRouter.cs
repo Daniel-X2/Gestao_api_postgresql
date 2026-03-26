@@ -3,7 +3,6 @@ using Api.Test;
 using Dto;
 
 
-
 namespace Api.Routers;
 
 public class  ClientRouter
@@ -12,6 +11,7 @@ public class  ClientRouter
     
     public  async  Task Routers(WebApplication app)
     {
+        
         app.MapGet("/ola", async Task(IServiceClient service,IServiceFuncionario servicefun,IServiceProduct servicprdo) =>
         {
             while (true)
@@ -27,8 +27,8 @@ public class  ClientRouter
             ListaClient lista=  await service.GetAllService();
             
             return lista ;
-        });
-        app.MapDelete("client/delete/{id}", async  Task<IResult> (int id,IServiceClient service) =>
+        }).WithTags("Client").WithSummary("Listar todos os clientes").WithDescription("Lista");
+        app.MapDelete("/client/delete/{id}", async  Task<IResult> (int id,IServiceClient service) =>
         {
           bool resultado= await service.DeleteService(id);
           //await _next(context);
@@ -41,8 +41,8 @@ public class  ClientRouter
           return Results.BadRequest(new {erro="erro ao tentar deletar"});
           
           
-        });
-        app.MapPost("client/add/", async Task<IResult> (ClientDto campos,IServiceClient service) =>
+        }).WithTags("Client").WithSummary("Excluir cliente por ID");
+        app.MapPost("/client/add/", async Task<IResult> (ClientDto campos,IServiceClient service) =>
         {
         bool resultado=  await  service.AddService(campos);
      
@@ -53,8 +53,8 @@ public class  ClientRouter
         }
         return Results.BadRequest(new {erro="erro ao tentar adicionar"});
       
-        });
-        app.MapPut("client/update/{id}/", async Task<IResult> (int id, ClientDto campos, IServiceClient service) =>
+        }).WithTags("Client").WithSummary("Adiciona clientes");
+        app.MapPut("/client/update/{id}/", async Task<IResult> (int id, ClientDto campos, IServiceClient service) =>
         {
           var resultado= await service.UpdateService(id,campos);
           //_next(context);
@@ -65,9 +65,6 @@ public class  ClientRouter
           }
           return Results.Ok(new {resultado="teve atualizaçoes parciais",camposNotUpdate=$"campos nao atualizados {resultado}"});
           
-        });
-        
-        
-
+        }).WithTags("Client").WithSummary("Atualiza o Client");
     }
 }

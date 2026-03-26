@@ -17,14 +17,14 @@ public class FuncionarioRouters
                 var n2= await n1.GetAll();
                 return n2 ;
                 
-            });
+            }).WithTags("Funcionario").WithSummary("Lista os funcionarios");
             
         
             app.MapGet("/funcionario/get/{id}",async (int id,IServiceFuncionario n1) =>
             {
                 var campo =await n1.GetByIdService(id);
                 return campo;
-            });
+            }).WithTags("Funcionario").WithSummary("Lista o funcionario com o ID");
             app.MapDelete("/Funcionario/delete/{id}", async Task<IResult> (int id,IServiceFuncionario n1) =>
             {
                 bool resultado =await n1.DeleteFuncionarioService(id);
@@ -34,7 +34,7 @@ public class FuncionarioRouters
                     return  Results.Ok();
                 }
                 return  Results.BadRequest();
-            });
+            }).WithTags("Funcionario").WithSummary("Excluir funcionario por ID");
             app.MapPost("/funcionario/add/",async Task<IResult> (FuncionarioDto campos, IServiceFuncionario service) =>
                     {
                      bool resultado=  await service.AddService(campos);
@@ -45,7 +45,7 @@ public class FuncionarioRouters
 
                      return Results.BadRequest("erro ao adicionar");
                      
-                    });
+                    }).WithTags("Funcionario").WithSummary("Adiciona funcionario");
             app.MapPut("funcionario/update/{id}/", async Task<IResult> (int id,FuncionarioDto campos, IServiceFuncionario service) =>
             {
             bool resultado=  await  service.UpdateFuncionarioService(campos, id);
@@ -54,7 +54,7 @@ public class FuncionarioRouters
                 return  Results.Ok("atualizado com sucesso");
             }
             return Results.BadRequest("erro ao atualizar");
-            });
+            }).WithTags("Funcionario").WithSummary("Atualiza o funcionario");
 
         }
         

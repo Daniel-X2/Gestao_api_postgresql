@@ -1,25 +1,27 @@
 services: 
-    api_db:
+    api: 
+      build: .
+      container_name: api5
+      environment:
+        - ASPNETCORE_HTTP_PORTS=5153
+        - ASPNETCORE_ENVIRONMENT=Development
       
-      container_name: api_db
+      ports:
+        - 5153:5153
+       
+      env_file: .env
+    postgres_db:
+      
+      container_name: postgres_db
       image: postgres:18.3-alpine3.23
       env_file: .env
       volumes:
-          - ./tabelas/sql.sql:/docker-entrypoint-initdb.d/init.sql
-          - postgres_data:/var/lib/postgresql/18/docker
+        - ./sql.sql:/docker-entrypoint-initdb.d/init.sql
+        - postgres_data:/var/lib/postgresql/18/docker
       environment:
-          - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       
       ports:
         - 5433:5432
-    
-    api: 
-      build: .
-      container_name: api
-      
-      #image: api
-      ports:
-        - 8080:8080
-      env_file: .env
 volumes:
-  postgres_data:
+    postgres_data:
