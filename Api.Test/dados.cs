@@ -9,6 +9,7 @@ public class ReturnDados
     
     public static  ClientDto ReturnCLient()
     {
+        
         var n1 = new Faker("pt_BR");
         ClientDto client = new ClientDto();
         //Console.WriteLine(n1.Person.Cpf());
@@ -29,7 +30,7 @@ public class ReturnDados
         product.Codigo = n1.Random.Int(min: 50, max: 2000);
         product.Lote = n1.Random.Int(min: 20, max: 2000);
         product.Quantidade = n1.Random.Int(min: 20, max: 2000);
-        product.ValorRevenda = n1.Finance.Random.Float();
+        product.ValorRevenda = n1.Finance.Random.Decimal();
         return product;
     }
 

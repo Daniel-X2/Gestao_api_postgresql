@@ -43,21 +43,11 @@ namespace Api.Core.Application.service
            }
 
            int resultado = await repo.AddFuncionario(campos);
-           switch (resultado)
+           if(resultado>=1)
            {
-               case 0:
-               {
-                   throw new ErroAddToDatabaseException();
-               }
-               case 1:
-               {
-                   return true;
-               }
-               default:
-               {
-                   return false;
-               }
+               return true;
            }
+           throw new ErroAddToDatabaseException();
        }
 
         public async Task<bool> UpdateFuncionarioService(FuncionarioDto campos,int id)
@@ -112,22 +102,12 @@ namespace Api.Core.Application.service
     
         public async Task<bool> DeleteFuncionarioService(int id)
         {
-            switch (await repo.DeleteFuncionario(id))
+            if(await repo.DeleteFuncionario(id)>=1)
             {
-                case 0:
-                {
-                    throw new InvalidIdException(id);
-                }
-                case >= 1:
-                {
-                    return true;
-                }
-                default:
-                {
-                    throw new InvalidIdException(id);
-                }
+                return true;
             }
-            
+
+            throw new InvalidIdException(id);
         }
         public async Task<FuncionarioDto> GetByIdService(int id)
         {

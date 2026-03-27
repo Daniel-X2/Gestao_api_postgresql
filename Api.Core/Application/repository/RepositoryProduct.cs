@@ -36,7 +36,7 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
         campos.Codigo=(int)reader["codigo"];
         campos.Lote=(int)reader["lote"];
         campos.Quantidade=(int)reader["quantidade"];
-        campos.ValorRevenda = (float)reader["valor_revenda"];
+        campos.ValorRevenda = (decimal)reader["valor_revenda"];
         
          
         return campos;
@@ -77,7 +77,7 @@ class RepositoryProduct(IConnect host):IRepositoryProduct
             campos.Nome=(string)read["nome"];
             campos.Codigo=(int)read["codigo"];
             campos.Quantidade=(int)read["quantidade"];
-            campos.ValorRevenda=(float)read["valor_revenda"];
+            campos.ValorRevenda=(decimal)read["valor_revenda"];
             campos.Lote=(int)read["lote"];
             lista.Product.Add(campos);
         }

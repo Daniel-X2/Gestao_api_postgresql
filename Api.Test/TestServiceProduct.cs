@@ -8,7 +8,30 @@ namespace Api.Test;
 public class TestServiceProduct
 {
     Mock<IRepositoryProduct> moq = new();
-   
+
+    [Fact]
+    public async Task TestGetProductValido()
+    {
+        
+        var product = new ListaProduct();
+        product.Product.Add(ReturnDados.ReturnProduct());
+        moq.Setup(repo => repo.GetAllProduct()).ReturnsAsync(product);
+        
+        var n1 =new  ServiceProduct(moq.Object);
+        await n1.GetAllProduct();
+    }
+    [Fact]
+    public async Task TestGetProductInvalido()
+    {
+        
+        var product = new ListaProduct();
+       
+        moq.Setup(repo => repo.GetAllProduct()).ReturnsAsync(product);
+        
+        var n1 =new  ServiceProduct(moq.Object);
+        await  Assert.ThrowsAsync<ReturnDataIsEmpty>(async () => await n1.GetAllProduct());
+        
+    }
    [Fact]
     public async Task TestAddProduct()
     {

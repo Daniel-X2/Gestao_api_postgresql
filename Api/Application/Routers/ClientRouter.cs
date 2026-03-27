@@ -23,11 +23,9 @@ public class  ClientRouter
         app.MapDelete("/client/delete/{id}", async  Task<IResult> (int id,IServiceClient service) =>
         {
           bool resultado= await service.DeleteService(id);
-          //await _next(context);
+          
           if (resultado)
           {
-              
-            
               return Results.Ok(new {resultado="foi deletado com sucesso"});
           }
           return Results.BadRequest(new {erro="erro ao tentar deletar"});

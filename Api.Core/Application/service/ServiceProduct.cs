@@ -20,21 +20,12 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
     {
        
        ListaProduct  lista =await repo.GetAllProduct();
-       switch (lista.Product.Count)
+       if(lista.Product.Count>=1)
        {
-           case 0:
-           {
-               throw new ReturnDataIsEmpty();
-           }
-           case >= 1:
-           {
                return lista;
-           }
-           default:
-           {
-               throw new ReturnDataIsEmpty();
-           }
        }
+
+       throw new ReturnDataIsEmpty();
     }
 
     public async Task<bool> AddProduct(ProdutoDto campos)
@@ -66,22 +57,11 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
 
 
             int resultado = await repo.AddProduct(campos);
-            switch (resultado)
+            if (resultado>=1)
             {
-                case 0:
-                {
-                    throw new ErroAddToDatabaseException();
-                }
-                case 1:
-                {
-                    return true;
-                }
-                default:
-                {
-                    return false;
-                }
+                return true;
             }
-            
+            throw new ErroAddToDatabaseException();
             
     }
 
@@ -164,22 +144,11 @@ class ServiceProduct(IRepositoryProduct repo):IServiceProduct
         }
 
        int resultado= await repo.UpdateProduct(campos, id);
-       switch (resultado)
+       if (resultado>=1)
        {
-           case 0:
-           {
-               throw new ErroUpdateToDatabaseException();
-               
-           }
-           case 1:
-           {
-               return true;
-           }
-           default:
-           {
-               throw new ErroUpdateToDatabaseException();
-           }
+           return true;
        }
+       throw new ErroUpdateToDatabaseException();
     }
 }
 }

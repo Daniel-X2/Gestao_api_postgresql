@@ -17,7 +17,7 @@ namespace Api.Core.Application.service
 {
     public async Task<ClientDto> GetByIdService(int id)
     {
-        
+        //falta adicionar esse aqui na rota
             ClientDto resultado = await repo.GetById(id);
             if (resultado==null)
             {
@@ -32,22 +32,13 @@ namespace Api.Core.Application.service
         
         ListaClient valores= await repo.GetAllClient();
        
-        switch (valores.Clients.Count)
+        if(valores.Clients.Count>=1)
         {
-            case 0:
-            {
-                throw new ReturnDataIsEmpty();
-            }
-            case >= 1:
-            {
-                return valores;
-            }
-            default:
-            {
-                throw new ReturnDataIsEmpty();
-            }
+            return valores;
         }
-   
+
+        throw new ReturnDataIsEmpty();
+
     }
     public async Task<bool> AddService(ClientDto campos)//
     {
@@ -124,10 +115,7 @@ namespace Api.Core.Application.service
             {
                 throw new ErroUpdateToDatabaseException();
             }
-            case >= 1:
-            {
-                return camposNotUpdate;
-            }
+            
         }
 
         return camposNotUpdate;
@@ -159,21 +147,7 @@ namespace Api.Core.Application.service
         }
         return true;
     }
-
-    public async Task IsValidCpf(string cpf)
-    {
-        Validation verificador = new();
-        verificador.IsValidDigit(cpf);
-        if (await repo.ExistsCpf(cpf) )
-        {
-            throw new InvalidCpfException(cpf);
-        }
-        
-    }
-    public async Task<int> GetIdService(string cpf)
-    {
-       int id= await repo.GetIdByCpf(cpf);
-       return id;
-    }
+    
+    
 }
 }

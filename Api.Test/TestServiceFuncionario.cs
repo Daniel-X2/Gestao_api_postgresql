@@ -1,6 +1,7 @@
 
 using Api.Core.Application.repository;
 using Api.Core.Application.service;
+using Dto;
 using Moq;
 using Xunit;
 
@@ -9,7 +10,24 @@ namespace Api.Test;
 public class TestServiceFuncionario
 {
     Mock<IRepositoryFuncionario> moq = new();
-
+    [Fact]
+    public async Task TestGetFuncionarioInvalido()
+    {
+        var campos = new ListaFuncionario();
+        moq.Setup(repo => repo.GetFuncionario()).ReturnsAsync(campos);
+        var n1 = new ServiceFuncionario(moq.Object);
+        await Assert.ThrowsAsync<ReturnDataIsEmpty>(async () => await n1.GetAll());
+    }
+    [Fact]
+    public async Task TestGetClientvalido()
+    {
+        var campos = new ListaFuncionario();
+        campos.Funcionarios.Add(ReturnDados.ReturnFuncionario());
+        moq.Setup(repo => repo.GetFuncionario()).ReturnsAsync(campos);
+        var n1 = new ServiceFuncionario(moq.Object);
+        await n1.GetAll();
+        
+    }
     [Fact]
     public async Task TestAddFuncionario()
     {

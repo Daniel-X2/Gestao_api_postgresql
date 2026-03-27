@@ -29,7 +29,7 @@ public class ReturnDados
         product.Codigo = n1.Random.Int(min: 50, max: 10000);
         product.Lote = n1.Random.Int(min: 20, max: 9000);
         product.Quantidade = n1.Random.Int(min: 20, max: 1000);
-        product.ValorRevenda = n1.Finance.Random.Float();
+        product.ValorRevenda = n1.Finance.Random.Decimal();
         return product;
     }
 

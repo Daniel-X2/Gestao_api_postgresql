@@ -23,6 +23,25 @@ public class TestServiceClient
         await n1.AddService(client);
         
     }
+
+    [Fact]
+    public async Task TestGetClientInvalido()
+    {
+        var campos = new ListaClient();
+        moq.Setup(repo => repo.GetAllClient()).ReturnsAsync(campos);
+        var n1 = new ServiceClient(moq.Object);
+        await Assert.ThrowsAsync<ReturnDataIsEmpty>(async () => await n1.GetAllService());
+    }
+    [Fact]
+    public async Task TestGetClientvalido()
+    {
+        var campos = new ListaClient();
+        campos.Clients.Add(ReturnDados.ReturnCLient());
+        moq.Setup(repo => repo.GetAllClient()).ReturnsAsync(campos);
+        var n1 = new ServiceClient(moq.Object);
+        await n1.GetAllService();
+        
+    }
     [Fact]
     public async Task TestAddClientInvalidoCpf()
     {

@@ -43,7 +43,7 @@ public class ProdutoDto
     public string Nome{get;set;}
     public int Codigo{get;set;}
     public int Quantidade{get;set;}
-    public float ValorRevenda{get;set;}
+    public decimal ValorRevenda{get;set;}
     public int Lote{get;set;}
 }
 }
