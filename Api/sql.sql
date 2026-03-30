@@ -18,6 +18,7 @@ CREATE TABLE  funcionario(
 	nome varchar(30),
 	cpf text,
 	isadmin bool,
+    senha_hash text,
 	quantidade_atestado int,
 	nascimento int
 	

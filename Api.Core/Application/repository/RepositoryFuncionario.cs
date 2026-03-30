@@ -17,25 +17,31 @@ public interface IRepositoryFuncionario
    internal Task<int> AddFuncionario(FuncionarioDto campos);//
    internal Task<int> UpdateFuncionario(FuncionarioDto campos,int id);
    internal Task<int> DeleteFuncionario(int id);
-   internal Task<int> GetIdByCpf(string cpf);
+   internal Task<FuncionarioLoginDto> GetAdmin(string cpf);
    internal Task<FuncionarioDto> GetById(int id);
     }
 internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
 {
-    public async Task<int> GetIdByCpf(string cpf)
+    public async Task<FuncionarioLoginDto> GetAdmin(string cpf)
     {
         await using NpgsqlConnection connect = host.Connect();
 
         await connect.OpenAsync();
 
-        await using var cmd = new NpgsqlCommand("SELECT id FROM funcionario WHERE cpf=@cpf ", connect);
+        await using var cmd = new NpgsqlCommand("SELECT isadmin,senha_hash,cpf FROM funcionario WHERE cpf=@cpf ", connect);
         cmd.Parameters.AddWithValue("cpf", cpf);
-
+        
         await using var reader = await cmd.ExecuteReaderAsync();
-        if (!await reader.ReadAsync()) { return 0;}
-        return (int)reader["id"];
+        if (!await reader.ReadAsync()) { return null;}
+    
+        FuncionarioLoginDto resultado = new();
+        resultado.isadmin =(bool) reader["isadmin"];
+        resultado.cpf = reader["cpf"].ToString();
+        resultado.SenhaHash = reader["senha_hash"].ToString();
+        
+        return resultado;
     }
-
+    
     public async Task<bool> ExistsCpf(string cpf)
     {
         await using NpgsqlConnection connect =host.Connect();
@@ -79,13 +85,14 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         
         await connect.OpenAsync();
 
-        await using (var cmd = new NpgsqlCommand("INSERT INTO funcionario (nome ,cpf, isadmin,quantidade_atestado,nascimento) VALUES (@nome ,@cpf, @isadmin,@quantidade_atestado,@nascimento)", connect))
+        await using (var cmd = new NpgsqlCommand("INSERT INTO funcionario (nome ,cpf, isadmin,quantidade_atestado,nascimento,senha_hash) VALUES (@nome ,@cpf, @isadmin,@quantidade_atestado,@nascimento,@senha_hash)", connect))
         {
             cmd.Parameters.AddWithValue("nome", campos.Nome);
             cmd.Parameters.AddWithValue("cpf", campos.Cpf);
             cmd.Parameters.AddWithValue("isadmin", campos.Isadmin);
             cmd.Parameters.AddWithValue("quantidade_atestado", campos.QuantidadeAtestado);
             cmd.Parameters.AddWithValue("nascimento",campos.Nascimento);
+            cmd.Parameters.AddWithValue("senha_hash", campos.Senha);
             resultado=await cmd.ExecuteNonQueryAsync();
         }
         

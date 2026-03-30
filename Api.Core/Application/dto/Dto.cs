@@ -30,14 +30,26 @@ public class FuncionarioDto
 {
     
     public string Nome{get;set;}
+    public string Senha { get; set; }
     public string Cpf{get;set;}
     public bool Isadmin{get;set;}
     public int QuantidadeAtestado{get;set;}
     public int Nascimento{get;set;}
 }
 
+public class FuncionarioLoginDto
+{
+    public bool isadmin { get; set; }
+    public string cpf { get; set; }
+    public string SenhaHash { get; set; }
+}
 
-
+public class FuncionarioJsonBody
+{
+    public string cpf { get; set; }
+    public string Senha { get; set; }
+    
+}
 public class ProdutoDto
 {
     public string Nome{get;set;}

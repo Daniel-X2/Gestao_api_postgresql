@@ -1,12 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>7f382cc9-1790-4972-b30c-047e6a09727c</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
   <PackageReference Include="Bogus" Version="35.6.5" />
+  <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.9" />
+  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.5" />
   <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
   <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
   <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.1.6" />

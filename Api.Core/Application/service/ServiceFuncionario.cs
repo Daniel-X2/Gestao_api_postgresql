@@ -11,11 +11,12 @@ namespace Api.Core.Application.service
        Task<bool> DeleteFuncionarioService(int id); 
        Task<ListaFuncionario> GetAll();
        Task<FuncionarioDto> GetByIdService(int id);
+       Task<FuncionarioLoginDto> Admin(string cpf);
    }
     public class  ServiceFuncionario(IRepositoryFuncionario repo):IServiceFuncionario
     {
        
-       public async Task<ListaFuncionario> GetAll()
+        public async Task<ListaFuncionario> GetAll()
        {
            ListaFuncionario lista=new();
            lista =await repo.GetFuncionario();
@@ -27,6 +28,18 @@ namespace Api.Core.Application.service
            return lista;
        }
 
+        public async Task<FuncionarioLoginDto> Admin(string cpf)
+        {
+            
+            FuncionarioLoginDto funcionario=await  repo.GetAdmin(cpf);
+            
+            if (funcionario==null)
+            {
+                throw new InvalidCpfException(cpf);
+            }
+
+            return funcionario;
+        }
         public async Task<bool> AddService(FuncionarioDto campos)
        {
            Validation verificador = new();

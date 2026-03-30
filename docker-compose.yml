@@ -1,7 +1,10 @@
 services: 
     api: 
-      build: .
-      container_name: api5
+      build:
+        context: .
+        dockerfile: Dockerfile
+      image: danizura/api-gestao-assincrona-api-s:1.0
+      container_name: api
       environment:
         - ASPNETCORE_HTTP_PORTS=5153
         - ASPNETCORE_ENVIRONMENT=Development

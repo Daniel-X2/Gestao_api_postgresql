@@ -9,11 +9,10 @@ public class ErroUpdateToDatabaseException : Exception
 }
 public class InvalidCpfException : Exception
 {
-    public InvalidCpfException() {}
-
     public InvalidCpfException(string cpf) : base($"o Cpf {cpf} nao e valido") { }
 }
 
+public class InvalidPassword : Exception { }
 public class InvalidNameException : Exception
 {
     public InvalidNameException(){}

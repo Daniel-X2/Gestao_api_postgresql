@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api/Api.csproj": {}
+    "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api/Api.csproj": {}
   },
   "projects": {
-    "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api.Core/Api.Core.csproj": {
+    "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api.Core/Api.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api.Core/Api.Core.csproj",
+        "projectUniqueName": "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api.Core/Api.Core.csproj",
         "projectName": "Api.Core",
-        "projectPath": "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api.Core/Api.Core.csproj",
+        "projectPath": "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api.Core/Api.Core.csproj",
         "packagesPath": "/home/daniel/.nuget/packages/",
-        "outputPath": "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api.Core/obj/",
+        "outputPath": "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/daniel/.nuget/NuGet/NuGet.Config"
@@ -44,6 +44,10 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
             "DotNetEnv": {
               "target": "Package",
               "version": "[3.1.1, )"
@@ -490,14 +494,14 @@
         }
       }
     },
-    "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api/Api.csproj": {
+    "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api/Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api/Api.csproj",
+        "projectUniqueName": "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api/Api.csproj",
         "projectName": "Api",
-        "projectPath": "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api/Api.csproj",
+        "projectPath": "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api/Api.csproj",
         "packagesPath": "/home/daniel/.nuget/packages/",
-        "outputPath": "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api/obj/",
+        "outputPath": "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/daniel/.nuget/NuGet/NuGet.Config"
@@ -512,8 +516,8 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api.Core/Api.Core.csproj": {
-                "projectPath": "/home/daniel/Documentos/GitHub/API-Gestao-Assincrona/Api.Core/Api.Core.csproj"
+              "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api.Core/Api.Core.csproj": {
+                "projectPath": "/home/daniel/Desktop/API-Gestao-Assincrona-sem-docker/Api.Core/Api.Core.csproj"
               }
             }
           }
@@ -534,6 +538,18 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
+            "Bogus": {
+              "target": "Package",
+              "version": "[35.6.5, )"
+            },
+            "Microsoft.AspNetCore.Authentication": {
+              "target": "Package",
+              "version": "[2.3.9, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[10.0.5, )"
+            },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -541,6 +557,14 @@
             "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerGen": {
+              "target": "Package",
+              "version": "[10.1.6, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerUI": {
+              "target": "Package",
+              "version": "[10.1.6, )"
             }
           },
           "imports": [

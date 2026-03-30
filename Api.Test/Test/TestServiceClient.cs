@@ -79,6 +79,17 @@ public class TestServiceClient
         
     }
     [Fact]
+    public async Task TestAddClientInvalidoRepo()
+    {
+        var client =ReturnDados.ReturnCLient() ;
+       
+        moq.Setup(repo=> repo.AddClient(client) ).ReturnsAsync(0);
+        var n1 = new ServiceClient(moq.Object);
+        
+        await Assert.ThrowsAsync<ErroAddToDatabaseException>(async ( )=> await n1.AddService(client));
+        
+    }
+    [Fact]
     public async Task TestUpdateClientValido()
     {
         var client =  ReturnDados.ReturnCLient() ;
@@ -99,6 +110,18 @@ public class TestServiceClient
         
         await Assert.ThrowsAsync<InvalidIdException>(async () => await n1.DeleteService(id));
 
+    }
+
+    public async Task TestUpdateInvalidoRepo(int id)
+    {
+        var client = ReturnDados.ReturnCLient();
+        
+        moq.Setup(repo => repo.GetById(5)).ReturnsAsync(client);
+        moq.Setup(repo => repo.UpdateClient(client, 5)).ReturnsAsync(0);
+        var n1 = new ServiceClient(moq.Object);
+
+        
+        await Assert.ThrowsAsync<ErroUpdateToDatabaseException>(async () => await n1.UpdateService(5, client));
     }
 
     [Theory]
