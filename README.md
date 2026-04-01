@@ -100,6 +100,11 @@ Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 ```env
 DB_CONNECTION=Host=localhost;Database=nome;Username=user;Password=senha
 POSTGRES_PASSWORD=senha
+JWT_KEY=Key
+JWT_ISSUER=MinhaApi
+JWT_AUDIENCE=MeuClient
+JWT_EXPIRES=2
+
 ```
 
 ### 2. Banco de Dados
