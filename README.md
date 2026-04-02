@@ -4,9 +4,7 @@
 API REST assíncrona desenvolvida em ASP.NET Core para gestão de clientes, funcionários e produtos, utilizando PostgreSQL como banco de dados. O projeto segue uma arquitetura modular com separação de responsabilidades entre as camadas de roteamento, serviços e repositórios.
 
 API disponível em produção:
-```
 https://api-gestao-assincrona.up.railway.app/
-```
 
 A documentação interativa (Swagger) está acessível na raiz da URL. Use o login padrão para gerar o token e testar os endpoints diretamente.
 
@@ -20,6 +18,7 @@ A documentação interativa (Swagger) está acessível na raiz da URL. Use o log
 - **Logs**: Serilog (console + arquivo rotativo diário)
 - **Configuração**: DotNetEnv (variáveis de ambiente via `.env`)
 - **Testes**: xUnit, Moq, Bogus
+- **Testes de Carga**: Locust
 - **Padrões**: Injeção de Dependência, Repository Pattern, Service Layer, Middleware de Exceções
 
 ## Estrutura do Projeto
@@ -46,6 +45,7 @@ A documentação interativa (Swagger) está acessível na raiz da URL. Use o log
 │   ├── TestServiceFuncionario.cs
 │   ├── TestServiceProduct.cs
 │   └── TestUtils.cs
+│
 │
 ├── Docker/
 │   ├── docker-compose.yml
@@ -107,7 +107,19 @@ Gerados automaticamente via Serilog em dois destinos:
 
 Cada requisição é registrada automaticamente com método HTTP, rota, status code e tempo de resposta.
 
-## Testes
+## Testes de Carga
+
+Realizados com Locust simulando usuários simultâneos com operações mistas de leitura e escrita (GET, POST, PUT, DELETE).
+
+| Usuários | Requisições | Req/s | Tempo médio | Mediana |
+|---|---|---|---|---|
+| 10 | 1.572 | 4.9 | 9.8ms | 4ms |
+| 50 | 8.346 | 23.2 | 7.4ms | 3ms |
+
+**Endpoints de leitura** mantiveram mediana de **3ms** em ambos os cenários com zero falhas.
+
+
+## Testes Unitários
 
 Os testes cobrem a camada de serviço com mocks dos repositórios, sem necessidade de banco de dados real.
 
