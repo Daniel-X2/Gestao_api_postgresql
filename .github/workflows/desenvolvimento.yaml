@@ -1,4 +1,4 @@
-name: entegra continua
+name: Entrega continua
 on: [pull_request,push]
  
 jobs:
