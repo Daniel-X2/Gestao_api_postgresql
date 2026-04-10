@@ -18,7 +18,10 @@ public class ListaProduct
 }
 public class ClientDto
 {
+    public int Id { get; set; }
     public string Nome{get;set;}
+    public string Empresa { get; set;}
+    public int Data { get; set; }
     public string Cpf{get;set;}
     public int Conta{get;set;}
     public bool Isvip{get;set;}
@@ -28,9 +31,11 @@ public class ClientDto
 
 public class FuncionarioDto
 {
-    
+    public int Id { get; set; }
     public string Nome{get;set;}
     public string Senha { get; set; }
+    public string Data { get; set; }
+    public string Empresa { get; set; }
     public string Cpf{get;set;}
     public bool Isadmin{get;set;}
     public int QuantidadeAtestado{get;set;}

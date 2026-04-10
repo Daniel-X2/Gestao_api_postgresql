@@ -15,8 +15,3 @@ COPY --from=build /app .
 ENTRYPOINT ["dotnet","Api.dll"]
 
 EXPOSE 5153
-
-
-
-
-

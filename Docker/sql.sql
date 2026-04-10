@@ -10,8 +10,9 @@ CREATE TABLE cliente (
 	nome varchar(30),
 	cpf text,
 	conta int,
-	isvip bool
-	
+	isvip bool,
+	data int,
+	empresa varchar(255)
 );
 CREATE TABLE  funcionario(
 	id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -20,8 +21,8 @@ CREATE TABLE  funcionario(
     senha_hash text,
 	isadmin bool,
 	quantidade_atestado int,
-	nascimento int
-	
+	nascimento int,
+	data text,
 	
 );
 CREATE TABLE produto(

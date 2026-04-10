@@ -17,6 +17,8 @@ public class ReturnDados
         client.Conta = n1.Random.Int(min:10,max:2000);
         client.Isvip = n1.Random.Bool();
         client.Nome = n1.Person.FullName;
+        client.Empresa = n1.Company.CompanyName();
+        client.Data = n1.Random.Int(min:2000, max:2026);
         
         return client;
     }
@@ -43,6 +45,8 @@ public class ReturnDados
         funcionario.Isadmin = n1.Random.Bool();
         funcionario.QuantidadeAtestado = n1.Random.Int(min: 0, max: 50);
         funcionario.Nascimento = n1.Person.DateOfBirth.Year;
+        funcionario.Empresa = n1.Company.CompanyName();
+        funcionario.Data = n1.Date.Past().ToString("yyyy-MM-dd");
        
         return funcionario;
     }

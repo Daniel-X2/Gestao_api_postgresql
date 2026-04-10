@@ -87,11 +87,14 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         while(await reader.ReadAsync())
         {
             FuncionarioDto campos=new();
+            campos.Id=(int)reader["id"];
             campos.Nome=(string)reader["nome"];
             campos.Cpf=(string)reader["cpf"];
             campos.Isadmin=(bool)reader["isadmin"];
             campos.QuantidadeAtestado=(int)reader["quantidade_atestado"];
             campos.Nascimento=(int)reader["nascimento"];
+            campos.Data = (string)reader["data"];
+            campos.Empresa = (string)reader["empresa"];
             lista.Funcionarios.Add(campos);
         }
          
@@ -110,7 +113,7 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         
         await connect.OpenAsync();
 
-        await using (var cmd = new NpgsqlCommand("INSERT INTO funcionario (nome ,cpf, isadmin,quantidade_atestado,nascimento,senha_hash) VALUES (@nome ,@cpf, @isadmin,@quantidade_atestado,@nascimento,@senha_hash)", connect))
+        await using (var cmd = new NpgsqlCommand("INSERT INTO funcionario (nome ,cpf, isadmin,quantidade_atestado,nascimento,senha_hash, data, empresa) VALUES (@nome ,@cpf, @isadmin,@quantidade_atestado,@nascimento,@senha_hash, @data, @empresa)", connect))
         {
             cmd.Parameters.AddWithValue("nome", campos.Nome);
             cmd.Parameters.AddWithValue("cpf", campos.Cpf);
@@ -118,6 +121,8 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
             cmd.Parameters.AddWithValue("quantidade_atestado", campos.QuantidadeAtestado);
             cmd.Parameters.AddWithValue("nascimento",campos.Nascimento);
             cmd.Parameters.AddWithValue("senha_hash", campos.Senha);
+            cmd.Parameters.AddWithValue("data", campos.Data);
+            cmd.Parameters.AddWithValue("empresa", campos.Empresa);
             resultado=await cmd.ExecuteNonQueryAsync();
         }
         
@@ -137,13 +142,15 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
 
         await connect.OpenAsync();
         int resultado;
-      await  using (var cmd=new NpgsqlCommand("UPDATE  funcionario set nome =@nome,cpf=@cpf,isadmin=@isadmin,quantidade_atestado=@quantidade_atestado,nascimento=@nascimento WHERE id=@id", connect))
+      await  using (var cmd=new NpgsqlCommand("UPDATE  funcionario set nome =@nome,cpf=@cpf,isadmin=@isadmin,quantidade_atestado=@quantidade_atestado,nascimento=@nascimento, data=@data, empresa=@empresa WHERE id=@id", connect))
         {
             cmd.Parameters.AddWithValue("nome", campos.Nome);
             cmd.Parameters.AddWithValue("cpf", campos.Cpf);
             cmd.Parameters.AddWithValue("isadmin", campos.Isadmin);
             cmd.Parameters.AddWithValue("quantidade_atestado", campos.QuantidadeAtestado);
             cmd.Parameters.AddWithValue("nascimento",campos.Nascimento);
+            cmd.Parameters.AddWithValue("data", campos.Data);
+            cmd.Parameters.AddWithValue("empresa", campos.Empresa);
             cmd.Parameters.AddWithValue("id", id);
             resultado=await cmd.ExecuteNonQueryAsync();
         }
@@ -191,11 +198,14 @@ internal class RepositoryFuncionario(IConnect host):IRepositoryFuncionario
         if (!await reader.ReadAsync()) { return null;}
         
         FuncionarioDto campos=new();
+        campos.Id=(int)reader["id"];
         campos.Nome=(string)reader["nome"];
         campos.Cpf=(string)reader["cpf"];
         campos.Isadmin=(bool)reader["Isadmin"];
         campos.Nascimento=(int)reader["nascimento"];
         campos.QuantidadeAtestado = (int)reader["quantidade_atestado"];
+        campos.Data = (string)reader["data"];
+        campos.Empresa = (string)reader["empresa"];
            
         
          

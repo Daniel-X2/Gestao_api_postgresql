@@ -50,10 +50,13 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         {
             
             ClientDto campos=new();
+            campos.Id=(int)reader["id"];
             campos.Nome=(string)reader["nome"];
             campos.Cpf=(string)reader["cpf"];
             campos.Conta=(int)reader["conta"];
             campos.Isvip=(bool)reader["isvip"];
+            campos.Data = (int)reader["data"];
+            campos.Empresa=(string)reader["empresa"];
             lista.Clients.Add(campos);
         }
          
@@ -77,11 +80,13 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         if (!await reader.ReadAsync()) { return null;}
         
         ClientDto campos=new();
+        campos.Id=(int)reader["id"];
         campos.Nome=(string)reader["nome"];
         campos.Cpf=(string)reader["cpf"];
         campos.Conta=(int)reader["conta"];
         campos.Isvip=(bool)reader["isvip"];
-           
+        campos.Data = (int)reader["data"];
+        campos.Empresa=(string)reader["empresa"];
         
          
         return campos;
@@ -99,12 +104,14 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         
         await connect.OpenAsync();
 
-        await using (var cmd = new NpgsqlCommand("INSERT INTO cliente (nome ,cpf, conta,isvip) VALUES (@nome, @cpf, @conta,@isvip)", connect))
+        await using (var cmd = new NpgsqlCommand("INSERT INTO cliente (nome ,cpf, conta,isvip,data,empresa) VALUES (@nome, @cpf, @conta,@isvip,@data,@empresa)", connect))
         {
             cmd.Parameters.AddWithValue("nome", campos.Nome);
             cmd.Parameters.AddWithValue("cpf", campos.Cpf);
             cmd.Parameters.AddWithValue("conta", campos.Conta);
             cmd.Parameters.AddWithValue("isvip", campos.Isvip);
+            cmd.Parameters.AddWithValue("data", campos.Data);
+            cmd.Parameters.AddWithValue("empresa", campos.Empresa);
             resultado=await cmd.ExecuteNonQueryAsync();
         }
         
@@ -156,12 +163,14 @@ internal class RepositoryClient(IConnect host):IRepositoryClient
         int resultado;
         
         
-       await using var cmd = new NpgsqlCommand("UPDATE  cliente set nome=@nome,cpf=@cpf,conta=@conta,isvip=@isvip  WHERE id = @id", connect);
+       await using var cmd = new NpgsqlCommand("UPDATE  cliente set nome=@nome,cpf=@cpf,conta=@conta,isvip=@isvip,data=@data,empresa=@empresa  WHERE id = @id", connect);
       
        cmd.Parameters.AddWithValue("conta",campos.Conta);
        cmd.Parameters.AddWithValue("isvip",campos.Isvip);
        cmd.Parameters.AddWithValue("nome", campos.Nome);
        cmd.Parameters.AddWithValue("cpf", campos.Cpf);
+       cmd.Parameters.AddWithValue("data", campos.Data);
+       cmd.Parameters.AddWithValue("empresa", campos.Empresa);
        cmd.Parameters.AddWithValue("id", id);
        
         
