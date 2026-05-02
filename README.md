@@ -169,7 +169,7 @@ dotnet run --project Api
 Um funcionário admin é inserido automaticamente ao inicializar o banco:
 ```json
 {
-  "cpf": "12345678911",
+  "cpf": "78069320036",
   "senha": "123"
 }
 ```
